@@ -84,8 +84,9 @@ class Chapters extends Base
 
                 $prev = cache('chapterPrev:' . $id);
                 if (!$prev) {
-                    $prev = Db::query(
-                        'select * from ' . $this->prefix . 'chapter where book_id=' . $book_id . ' and chapter_order<' . $chapter->chapter_order . ' order by chapter_order desc limit 1');
+                    $prev = Db::query('select * from ' . $this->prefix .
+                        'chapter where book_id=' . $book_id . ' and
+                     id=(SELECT MAX(id) FROM (SELECT id FROM '. $this->prefix . 'chapter where id<'. $id .') as a)');
                     cache('chapterPrev:' . $id, $prev, null, 'redis');
                 }
                 if (count($prev) > 0) {
@@ -97,7 +98,9 @@ class Chapters extends Base
                 $next = cache('chapterNext:' . $id);
                 if (!$next) {
                     $next = Db::query(
-                        'select * from ' . $this->prefix . 'chapter where book_id=' . $book_id . ' and chapter_order>' . $chapter->chapter_order . ' order by chapter_order limit 1');
+                        'select * from ' . $this->prefix .
+                        'chapter where book_id=' . $book_id . ' and
+                     id=(SELECT MIN(id) FROM (SELECT id FROM '. $this->prefix . 'chapter where id>'. $id .') as a)');
                     cache('chapterNext:' . $id, $next, null, 'redis');
                 }
                 if (count($next) > 0) {

@@ -63,7 +63,6 @@ class BookService
                 'query' => request()->param(),
             ]);
         foreach ($data as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -88,7 +87,6 @@ class BookService
         $books = Book::with(['chapters','author'])->where($where)
             ->limit($num)->order($order, 'desc')->select();
         foreach ($books as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
             $book['taglist'] = explode('|', $book->tags);
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
@@ -107,7 +105,6 @@ class BookService
             foreach ($data as &$item) {
                 if (!is_null($item['book'])) {
                     $book = $item['book'];
-                    //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
                     $book['taglist'] = explode('|', $item['book']['tags']);
                     $item['book'] = $book;
                     if ($end_point == 'id') {
@@ -134,7 +131,6 @@ class BookService
         }
         $books = Book::where($map)->limit(10)->select();
         foreach ($books as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -160,11 +156,11 @@ class BookService
 
     public function getRand($num, $prefix, $end_point)
     {
-        $books = Db::query('SELECT a.id,a.book_name,a.summary,a.end,b.author_name FROM 
-(SELECT ad1.id,book_name,summary,end,author_id,cover_url
-FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM ' . $prefix . 'book)-(SELECT MIN(id) FROM ' . $prefix . 'book))+(SELECT MIN(id) FROM ' . $prefix . 'book)) AS id)
- AS t2 WHERE ad1.id >= t2.id ORDER BY ad1.id LIMIT ' . $num . ') as a
- INNER JOIN author as b on a.author_id = b.id');
+        $books = Db::query('SELECT a.id,a.book_name,a.summary,a.end,a.author_name,a.cover_url FROM 
+                    (SELECT ad1.id,book_name,summary,`end`,author_id,cover_url,author_name
+FROM ' . $this->prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM ' . $this->prefix . 'book)-(SELECT MIN(id) FROM '
+            . $this->prefix . 'book))+(SELECT MIN(id) FROM ' . $this->prefix . 'book)) AS id)
+             AS t2 WHERE ad1.id >= t2.id ORDER BY ad1.id LIMIT 20) as a');
         foreach ($books as &$book) {
             //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {

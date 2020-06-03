@@ -32,7 +32,6 @@ class Books extends Base
             try {
                 $book_end_point = config('seo.book_end_point');
                 if ($book_end_point == 'id') {
-
                     $book = Book::with(['chapters' => function ($query) {
                         $query->order('chapter_order');
                     }])->findOrFail($id);

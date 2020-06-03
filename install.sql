@@ -129,7 +129,7 @@ CREATE TABLE `xwx_banner` (
 DROP TABLE IF EXISTS `xwx_book`;
 CREATE TABLE `xwx_book` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `unique_id` varchar(100) NOT NULL COMMENT '漫画标识', 
+  `unique_id` char(100) NOT NULL COMMENT '漫画标识',
   `book_name` varchar(50) NOT NULL COMMENT '漫画名',
   `nick_name` varchar(100) DEFAULT '' COMMENT '别名',
   `create_time` int(11) DEFAULT '0',
@@ -292,6 +292,25 @@ CREATE TABLE `xwx_clicks`  (
   INDEX `book_id`(`book_id`) USING BTREE,
   INDEX `cdate`(`cdate`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for xwx_article
+-- ----------------------------
+DROP TABLE IF EXISTS `xwx_article`;
+CREATE TABLE `xwx_article`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `unique_id` char(100) DEFAULT NULL,
+  `title` varchar(200) NOT NULL,
+  `content_url` varchar(200) NOT NULL,
+  `desc` text,
+  `book_id` int(10) UNSIGNED DEFAULT NULL,
+  `create_time` int(10) UNSIGNED DEFAULT NULL,
+  `update_time` int(10) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `title`(`title`) USING BTREE,
+  KEY `book_id`(`book_id`) USING BTREE,
+  KEY `unique_id`(`unique_id`) USING BTREE
+) ENGINE = InnoDB ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for xwx_vip_code
