@@ -5,6 +5,8 @@ namespace app\admin\controller;
 
 
 use app\model\Article;
+use Overtrue\Pinyin\Pinyin;
+use think\facade\App;
 use think\facade\View;
 
 class Articles extends BaseAdmin
@@ -22,6 +24,25 @@ class Articles extends BaseAdmin
             'articles' => $data['articles'],
             'count' => $data['count']
         ]);
+        return view();
+    }
+
+    public function create() {
+        if (request()->isPost()) {
+            $title = trim(input('title'));
+            $article = new Article();
+            $article['title'] = $title;
+            $article['unique_id'] = $this->convert($title);
+            $article['desc'] = input('desc');
+            $article['book_id'] = input('book_id');
+            $content = input('content');
+            $dir = App::getRootPath().'public/static/upload/article/';
+            $savename = md5($title).'.txt';
+            file_put_contents($dir.$savename, $content);
+            $article['content_url'] = '/static/upload/article/'.$savename;
+            $article->save();
+            $this->success('添加成功','index',1);
+        }
         return view();
     }
 
@@ -57,5 +78,22 @@ class Articles extends BaseAdmin
         } else {
             return json(['err' => '1','msg' => '删除失败']);
         }
+    }
+
+    protected function convert($str){
+        $pinyin = new Pinyin();
+        $name_format = config('seo.name_format');
+        switch ($name_format) {
+            case 'pure':
+                $arr = $pinyin->convert($str);
+                $str = implode($arr,'');
+                halt($str);
+                break;
+            case 'abbr':
+                $str = $pinyin->abbr($str);break;
+            default:
+                $str = $pinyin->convert($str);break;
+        }
+        return $str;
     }
 }
