@@ -1,0 +1,54 @@
+{extend name="pub/base" /}
+{block name="title"}
+<title>匹配漫画</title>
+{/block}
+{block name="body"}
+<div class="Hui-admin-article">
+    <div class="Hui-article">
+        <article class="clearfix pd-20">
+            <form class="form form-horizontal" action="match" method="post">
+                <div class="row clearfix">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>起始漫画ID：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text" value="" name="start">
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>结束漫画ID：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text" value="" name="last">
+                    </div>
+                </div>
+
+
+                <div class="row clearfix">
+                    <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                        <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                        <a href="{:url('articles/index')}" class="btn btn-success radius">返回</a>
+                    </div>
+                </div>
+            </form>
+        </article>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("form").validate({
+            rules: {
+                start: {
+                    required: true,
+                    digits: true
+                },
+                last:{
+                    required: true,
+                    digits: true
+                }
+            },
+            onkeyup: false,
+            focusCleanup: false,
+            success:"valid"
+        });
+    });
+</script>
+{/block}

@@ -289,8 +289,8 @@ CREATE TABLE `xwx_clicks`  (
   `clicks` int(10) UNSIGNED NOT NULL,
   `cdate` datetime(0) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `book_id`(`book_id`) USING BTREE,
-  INDEX `cdate`(`cdate`) USING BTREE
+  KEY `book_id`(`book_id`) USING BTREE,
+  KEY `cdate`(`cdate`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -307,7 +307,7 @@ CREATE TABLE `xwx_article`  (
   `create_time` int(10) UNSIGNED DEFAULT NULL,
   `update_time` int(10) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `title`(`title`) USING BTREE,
+  FULLTEXT KEY `title` (`title`) with parser ngram,
   KEY `book_id`(`book_id`) USING BTREE,
   KEY `unique_id`(`unique_id`) USING BTREE
 ) ENGINE = InnoDB ROW_FORMAT = Dynamic;
