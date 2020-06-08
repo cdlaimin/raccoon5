@@ -46,7 +46,7 @@ class Sitemap extends BaseAdmin
         $page = intval(ceil($total / $pagesize));
         for ($i = 1; $i <= $page; $i++) {
             $arr = array();
-            $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset>\n";
+            $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
             $books = $data->limit($pagesize * ($i - 1), $pagesize)->select();
             foreach ($books as &$book) {
                 if ($this->end_point == 'id') {
@@ -81,7 +81,7 @@ class Sitemap extends BaseAdmin
         $page = intval(ceil($total / $pagesize));
         for ($i = 1; $i <= $page; $i++) {
             $arr = array();
-            $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset>\n";
+            $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
             $chapters = $data->limit($pagesize * ($i - 1), $pagesize)->select();
             foreach ($chapters as $chapter) {
                 $temp = array(
