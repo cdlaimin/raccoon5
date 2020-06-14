@@ -5,10 +5,9 @@ namespace app\admin\controller;
 
 use app\model\Author;
 use app\model\Book;
-use app\service\AuthorService;
-use app\service\BookService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
+use think\exception\HttpException;
 use think\exception\ValidateException;
 use think\facade\View;
 use app\model\Area;
@@ -93,7 +92,7 @@ class Books extends BaseAdmin
             if ($result) {
                 $this->success('添加成功','index',1);
             } else {
-                throw new ValidateException('添加失败');
+                throw new HttpException('添加失败');
             }
         }
         $areas = Area::select();

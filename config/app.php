@@ -27,6 +27,7 @@ return [
         'mip' => 'mip',
         'api' => 'api',
         'app' => 'app',
+        'author' => 'author',
         '' => 'index',
         'www' => 'index'
     ],

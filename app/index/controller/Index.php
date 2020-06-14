@@ -46,6 +46,7 @@ class Index extends Base
             $hot_books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
             cache('hotBooks', $hot_books, null, 'redis');
         }
+        
 
         $newest = cache('newestHomepage');
         if (!$newest) {
