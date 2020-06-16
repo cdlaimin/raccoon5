@@ -25,12 +25,12 @@
                 dataType: 'json',
                 success: function (data) {
                     var result = data;
-                    if (result.code == 0) { //删除成功
-                        layer.msg(result.msg, {icon: 2, time: 1000}, function () {
+                    if (result.err == 0) { //删除成功
+                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
                             location.reload();
                         });
                     } else {
-                        layer.msg(result.msg, {icon: 1}, function () {
+                        layer.msg(result.msg, {icon: 2, time: 1000}, function () {
                             location.reload();
                         });
                     }

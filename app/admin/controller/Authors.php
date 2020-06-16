@@ -29,44 +29,25 @@ class Authors extends BaseAdmin
         return view();
     }
 
-    public function create()
-    {
-        if (request()->isPost()) {
-            $author_name = input('author_name');
-            $author = new Author();
-            $author->author_name = $author_name;
-            $result = $author->save();
-            if ($result) {
-                return json(['err' => 0, 'msg' => '添加成功']);
-            } else {
-                return json(['err' => 1, 'msg' => '添加失败']);
-            }
-        }
-        return view();
-    }
-
-    public function edit()
-    {
-        if (request()->isPost()) {
-            $data = request()->param();
-            $result = Author::update($data);
-            if ($result) {
-                return json(['err' =>0,'msg'=>'修改成功']);
-            }else{
-                return json(['err' =>1,'msg'=>'修改失败']);
-            }
-        }
+    public function edit() {
         $id = input('id');
         try {
             $author = Author::findOrFail($id);
-            View::assign([
-                'author' => $author,
-            ]);
-            return view();
+            if ($author->status == 0) {
+                $author->status = 1;
+            } else {
+                $author->status = 0;
+            }
+            $result = $author->save();
+            if ($result) {
+                return json(['err' => '0','msg' => '修改状态成功']);
+            } else {
+                return json(['err' => '1','msg' => '修改状态失败']);
+            }
         } catch (DataNotFoundException $e) {
-            abort(404, $e->getMessage());
+            return json(['err' => '1','msg' => $e->getMessage()]);
         } catch (ModelNotFoundException $e) {
-            abort(404, $e->getMessage());
+            return json(['err' => '1','msg' => $e->getMessage()]);
         }
     }
 

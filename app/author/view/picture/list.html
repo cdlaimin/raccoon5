@@ -1,6 +1,6 @@
 {extend name="pub/base" /}
 {block name="head"}
-<title>章节管理-{$site_name}</title>
+<title>图片管理-{$site_name}</title>
 <style>
     /** 数据表格中的select尺寸调整 */
     .layui-table-view .layui-table-cell .layui-select-title .layui-input {
@@ -46,28 +46,26 @@
 </div>
 <!-- 表格操作列 -->
 <script type="text/html" id="tbBasicTbBar">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="picture">图片管理</a>
+
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 {/block}
 {block name="js"}
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'dropdown', 'admin', 'index'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'dropdown', 'admin','index'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
-        var admin = layui.admin;
         var index = layui.index;
         var dropdown = layui.dropdown;
 
         /* 渲染表格 */
         var insTb = table.render({
             elem: '#tbBasicTable',
-            url: '/chapters/getlist?book_id=' + {$book_id},
+            url: '/picture/getlist?chapter_id=' + {$chapter_id},
             page: true,
             toolbar: ['<p>',
                 '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
@@ -75,9 +73,15 @@
             cellMinWidth: 100,
             cols: [[
                 {type: 'checkbox'},
-                {field: 'chapter_order', title: '章节序', align: 'center', sort: true},
-                {field: 'chapter_name', title: '章节名', align: 'center', sort: true},
-                {field: 'count', title: '图片数', align: 'center', sort: true},
+                {field: 'pic_order', title: '图片序', align: 'center', sort: true},
+                {
+                    field: 'cover_url',
+                    title: '图片',
+                    align: 'center',
+                    sort: true,
+                    templet: '<div><img src="{{d.img_url}}"/></div>' +
+                        ''
+                },
                 {field: 'create_time', title: '创建时间', align: 'center', sort: true},
                 {field: 'update_time', title: '创建时间', align: 'center', sort: true},
                 {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
@@ -87,24 +91,8 @@
         /* 表格工具条点击事件 */
         table.on('tool(tbBasicTable)', function (obj) {
             var data = obj.data; // 获得当前行数据
-            if (obj.event === 'edit') { // 修改
-                admin.open({
-                    title: '章节编辑',
-                    url: "/chapters/edit?id=" + data.id,
-                    end: function () {
-                        insTb.reload()
-                    }
-                });
-            } else if (obj.event === 'del') { // 删除
+            if (obj.event === 'del') { // 删除
                 del(obj, data.id)
-            } else if (obj.event === 'picture') {
-                index.openTab({
-                    title: '图片管理',
-                    url: "/picture/list?chapter_id=" + data.id,
-                    end: function () {
-                        insTb.reload()
-                    }
-                })
             }
             dropdown.hideAll();
         });
@@ -112,9 +100,9 @@
         /* 表格头工具栏点击事件 */
         table.on('toolbar(tbBasicTable)', function (obj) {
             if (obj.event === 'add') { // 添加
-                admin.open({
-                    title: '添加章节',
-                    url:'/chapters/create?book_id=' + {$book_id},
+                index.openTab({
+                    title: '添加图片',
+                    url:'/picture/create?chapter_id=' + {$chapter_id},
                     end: function() {
                         insTb.reload()
                     }

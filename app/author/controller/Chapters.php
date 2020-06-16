@@ -6,6 +6,8 @@ namespace app\author\controller;
 
 use app\model\Book;
 use app\model\Chapter;
+use app\model\Photo;
+use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
 
@@ -29,9 +31,12 @@ class Chapters extends Base
         $book_id = input('book_id');
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $data = Chapter::where('book_id','=',$book_id)->order('id', 'desc');
+        $data = Chapter::where('book_id','=',$book_id)->order('chapter_order', 'desc');
         $count = $data->count();
         $chapters = $data->limit(($page - 1) * $limit, $limit)->select();
+        foreach ($chapters as &$chapter) {
+            $chapter['count'] = Photo::where('chapter_id','=',$chapter['id'])->count();
+        }
         return json([
             'code' => 0,
             'msg' => '',
@@ -70,5 +75,45 @@ class Chapters extends Base
             'order' => $lastChapterOrder + 1,
         ]);
         return view();
+    }
+
+    public function edit() {
+        $id = input('id');
+        try {
+            $chapter = Chapter::findOrFail($id);
+            if (request()->isPost()) {
+                $chapter->chapter_name = input('chapter_name');
+                $chapter->order = input('chapter_order');
+                $result = $chapter->save();
+                if ($result) {
+                    return json(['err' =>0,'msg'=>'编辑成功']);
+                } else {
+                    return json(['err' =>1,'msg'=>'编辑失败']);
+                }
+            } else {
+                View::assign('chapter', $chapter);
+                return view();
+            }
+        } catch (ModelNotFoundException $e) {
+            abort(404);
+        }
+    }
+
+    public function delete()
+    {
+        $id = input('id');
+        try {
+            $chapter = Chapter::findOrFail($id);
+            $photos = $chapter->photos;
+            if (count($photos) > 0){
+                return ['err'=>1,'msg'=>'章节下还存在图片，请先删除'];
+            }
+            $chapter->delete();
+            return ['err'=>0,'msg'=>'删除成功'];
+        } catch (DataNotFoundException $e) {
+            abort(404, $e->getMessage());
+        } catch (ModelNotFoundException $e) {
+            abort(404, $e->getMessage());
+        }
     }
 }

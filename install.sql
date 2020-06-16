@@ -99,11 +99,19 @@ CREATE TABLE `xwx_user_buy`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `xwx_author`;
 CREATE TABLE `xwx_author` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` char(32) NOT NULL,
+  `password` char(32) NOT NULL,
+  `email` char(100) NOT NULL,
   `author_name` varchar(100) NOT NULL,
+  `status` tinyint(4) NOT NULL,
    `create_time` int(11) DEFAULT '0',
   `update_time` int(11) DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
+  key `username` (`username`) USING BTREE,
+  key `password` (`password`) USING BTREE,
+   key `email` (`email`) USING BTREE,
+    key `status` (`status`) USING BTREE,
   key `author_name` (`author_name`) USING BTREE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 

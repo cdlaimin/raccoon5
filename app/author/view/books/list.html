@@ -91,7 +91,7 @@
             cellMinWidth: 100,
             cols: [[
                 {type: 'checkbox'},
-                {type: 'numbers'},
+                {field: 'id', title: 'ID', align: 'center', sort: true},
                 {field: 'book_name', title: '书名', align: 'center', sort: true},
                 {field: 'nick_name', title: '别名', align: 'center', sort: true},
                 {field: 'tags', title: '题材', align: 'center', sort: true},
@@ -149,6 +149,14 @@
                     type:'post',
                     success(res) {
                         subResHandle(res)
+                    }
+                })
+            } else if (obj.event === 'chapter') {
+                index.openTab({
+                    title: '章节管理',
+                    url: "/chapters/list?book_id=" + data.id,
+                    end: function() {
+                        insTb.reload()
                     }
                 })
             }
