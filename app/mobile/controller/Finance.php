@@ -152,7 +152,7 @@ class Finance extends BaseUc
             }
         } else {
             $payment = strtolower(config('site.payment'));
-            $payments = config('payment.' . $payment . '.channel');
+            $payments = config('payment.pay.channel');
             View::assign([
                 'balance' => $this->balance,
                 'moneys' => config('payment.money'),

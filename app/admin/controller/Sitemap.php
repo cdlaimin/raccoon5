@@ -64,7 +64,7 @@ class Sitemap extends BaseAdmin
                 $content .= $this->create_item($item);
             }
             $content .= '</urlset>';
-            $sitemap_name = '/sitemap_' . $name . '_' . $i . '.xml';
+            $sitemap_name = '/sitemap_' . $name . '_' . 'books' . '_' . $i . '.xml';
             file_put_contents(App::getRootPath() . 'public' .$sitemap_name, $content);
             file_put_contents(App::getRootPath() . 'public' .'/sitemap_' . $name . '_newest' . '.xml', $content);
             echo '<a href="' . $sitemap_name . '" target="_blank">' . $name . '端网站地图制作成功！点击这里查看</a><br />';
@@ -94,7 +94,7 @@ class Sitemap extends BaseAdmin
                 $content .= $this->create_item($item);
             }
             $content .= '</urlset>';
-            $sitemap_name = '/sitemap_' . $name . '_' . $i . '.xml';
+            $sitemap_name = '/sitemap_' . $name . '_' . 'chapters' . '_' . $i . '.xml';
             file_put_contents(App::getRootPath() . 'public' .$sitemap_name, $content);
             file_put_contents(App::getRootPath() . 'public' .'/sitemap_' . $name . '_newest' . '.xml', $content);
             echo '<a href="' . $sitemap_name . '" target="_blank">' . $name . '端网站地图制作成功！点击这里查看</a><br />';

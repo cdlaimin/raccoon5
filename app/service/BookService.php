@@ -140,9 +140,10 @@ class BookService
         return $books;
     }
 
-    public function getByTag($tag, $end_point)
+    public function getByTag($tag, $end_point, $limit)
     {
-        $books = Book::where('tags', 'like', '%' . $tag . '%')->order('id','desc')->select();
+        $books = Book::where('tags', 'like', '%' . $tag . '%')
+            ->order('id','desc')->limit($limit)->select();
         foreach ($books as &$book) {
             //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {

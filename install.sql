@@ -100,11 +100,11 @@ CREATE TABLE `xwx_user_buy`  (
 DROP TABLE IF EXISTS `xwx_author`;
 CREATE TABLE `xwx_author` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` char(32) NOT NULL,
-  `password` char(32) NOT NULL,
-  `email` char(100) NOT NULL,
+  `username` char(32) DEFAULT 'nil',
+  `password` char(32) DEFAULT 'nil',
+  `email` char(100) DEFAULT 'nil',
   `author_name` varchar(100) NOT NULL,
-  `status` tinyint(4) NOT NULL,
+  `status` tinyint(4) DEFAULT 0,
    `create_time` int(11) DEFAULT '0',
   `update_time` int(11) DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
