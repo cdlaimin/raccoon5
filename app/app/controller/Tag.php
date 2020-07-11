@@ -79,11 +79,13 @@ class Tag extends Base
         $num = input('num');
         $banners = cache('bannersHomepage');
         if (!$banners) {
-            $banners = Banner::where('banner_order', '>', 0)->order('banner_order', 'desc')->select();
-            cache('bannersHomepage', $banners, null, 'redis');
-        }
-        foreach ($banners as &$banner) {
-            $banner['pic_name'] = $this->url . '/static/upload/' . $banner['pic_name'];
+            $banners = Banner::with('book')->where('banner_order','>', 0)->order('banner_order','desc')->select();
+            foreach ($banners as &$banner) {
+                if (substr($banner['pic_name'], 0, strlen('http')) != 'http') {
+                    $banner['pic_name'] = $this->url . '/static/upload/' . $banner['pic_name'];
+                }
+            }
+            cache('bannersHomepage',$banners, null, 'redis');
         }
         return json(['success' => 1, 'banners' => $banners]);
     }
