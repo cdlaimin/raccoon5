@@ -14,11 +14,12 @@
 - 前台一些列表页面使用vue上拉加载，用户体验更好
 
 # 关于
-- 官方论坛：http://xhxcms.com
+- 官方博客：https://www.xiaohuanxiong.net/
 - 文档地址：https://www.kancloud.cn/hiliqi/xwx_comic_cms
 - 安装手册：https://shimo.im/docs/88tvyHk9XRpjv3hC/ 
 - 交流论坛：https://support.qq.com/products/176371
 - 官方QQ群：780362399
+- 小浣熊系列软件官网：http://soft.xiaohuanxiong.net/
 
 # 开源协议
 本程序采用MIT协议开源
