@@ -70,7 +70,7 @@ class index extends Base
             'ends' => $ends,
             'tags' => $tags,
             'catelist' => $catelist,
-            'c_url' => $this->c_url
+            'c_url' => config('site.schema').config('site.mobile_domain')
         ]);
         return view($this->tpl);
     }

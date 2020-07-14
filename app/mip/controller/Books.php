@@ -113,7 +113,7 @@ class Books extends Base
             'comments' => $comments,
             'start_pay' => $start_pay,
             'clicks' => $clicks,
-            'c_url' => $this->c_url.'/'.$book->id
+            'c_url' => config('site.schema').config('site.mobile_domain').'/'.BOOKCTRL.'/'.$book->id
         ]);
         return view($this->tpl);
     }

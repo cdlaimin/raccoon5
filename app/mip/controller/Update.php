@@ -41,7 +41,7 @@ class Update extends Base
             'books' => $data['books'],
             'page' => $data['page'],
             'param' => $param,
-            'c_url' => $this->c_url,
+            'c_url' => config('site.schema').config('site.mobile_domain').'/update',
             'tags' => $tags,
         ]);
         return view($this->tpl);
