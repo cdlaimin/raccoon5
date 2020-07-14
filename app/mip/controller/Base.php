@@ -28,7 +28,7 @@ class Base extends BaseController
         $controller = strtolower($this->request->controller());
         $action = strtolower($this->request->action());
         $this->tpl = $tpl_root.$controller.'/'.$action.'.html';
-        $this->c_url = config('site.schema').config('site.mobile_domain').'/'.$controller.'/'.$action;
+        $this->c_url = config('site.schema').config('site.mobile_domain').'/'.$controller;
         View::assign([
             'url' => config('site.schema').config('site.domain'),
             'site_name' => config('site.site_name'),
