@@ -29,6 +29,7 @@ class Account extends BaseController
                     $author->password = trim($data['password']);
                     $author->email = trim($data['email']);
                     $author->author_name = '佚名';
+                    $author->status = 0;
                     $result = $author->save();
                     if ($result) {
                         return json(['err' => 0, 'msg' => '注册成功，请登录']);
