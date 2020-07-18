@@ -152,6 +152,7 @@ CREATE TABLE `xwx_book` (
   `author_id` int(11) NOT NULL COMMENT '作者ID',
   `author_name` varchar(100) DEFAULT '佚名',
   `cover_url` varchar(255) DEFAULT '' COMMENT '封面图路径',
+  `banner_url` varchar(255) DEFAULT '' COMMENT '封面横图路径',
   `start_pay` int(10) NOT NULL DEFAULT '99999' COMMENT '第m话开始需要付费',
   `money` decimal(10,2) DEFAULT '0' COMMENT '每章所需费用',
   `area_id` int(11) NOT NULL COMMENT '漫画所属地区',
@@ -165,7 +166,6 @@ CREATE TABLE `xwx_book` (
   KEY `is_top` (`is_top`) USING BTREE,
   KEY `area_id` (`area_id`) USING BTREE,
    KEY `is_copyright` (`is_copyright`) USING BTREE,
-  -- KEY `book_name` (`book_name`) USING BTREE
   FULLTEXT KEY `fidx` (`book_name`,`summary`,`nick_name`,`author_name`) with parser ngram,
   unique KEY `unique_id`(`unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
