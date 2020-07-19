@@ -1,0 +1,54 @@
+{extend name="./template/default/m/pub/base.html" /}
+{block name="seo"}
+<title>{$topic.topic_name}专题-{$site_name}</title>
+{/block}
+{block name="content"}
+{include file="./template/default/m/pub/top2.html" /}
+<div id="app">
+    <div class="manga-list-bar" id="end">
+        <a class="manga-list-bar-item">{$topic.topic_name}</a>
+
+        <a class="manga-list-bar-right " id="manga-list-bar-right">推荐</a>
+        <div class="manga-list-bar-right-down" id="manga-list-bar-right-down" style="display:none;overflow-y: scroll;">
+            {volist name="topics" id="vo"}
+            <div>
+                <a class="manga-list-bar-right-down-item" href="/topic/{$vo.id}">{$vo.topic_name}</a>
+            </div>
+            {/volist}
+        </div>
+    </div>
+    <div class="manga-list" style="border:none;background-color:#f8f8f8;padding-top: 87px;">
+        <ul class="manga-list-2" >
+            {volist name="books" id="vo"}
+            <li>
+                <div class="manga-list-2-cover">
+                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
+                        <img class="manga-list-2-cover-img" src="{$vo.cover_url}">
+                    </a>
+                </div>
+                <p class="manga-list-2-title">
+                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">{$vo.book_name}</a>
+                </p>
+                <p class="manga-list-2-tip">
+                    {$vo.summary}
+                </p>
+            </li>
+            {/volist}
+        </ul>
+    </div>
+</div>
+<div class="toast" style="display:none;"></div>
+<script>
+    $(function () {
+        $("#manga-list-bar-right").click(function () {
+            if ($("#manga-list-bar-right-down").is(":hidden")) {
+                $("#manga-list-bar-right-down").show();
+            }
+            else {
+                $("#manga-list-bar-right-down").hide();
+            }
+        });
+    });
+</script>
+{include file="./template/default/m/pub/return_top.html"}
+{/block}

@@ -166,7 +166,7 @@ CREATE TABLE `xwx_book` (
   KEY `is_top` (`is_top`) USING BTREE,
   KEY `area_id` (`area_id`) USING BTREE,
    KEY `is_copyright` (`is_copyright`) USING BTREE,
-  FULLTEXT KEY `fidx` (`book_name`,`summary`,`nick_name`,`author_name`) with parser ngram,
+  FULLTEXT KEY `fidx` (`book_name`) with parser ngram,
   unique KEY `unique_id`(`unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
@@ -401,6 +401,22 @@ CREATE TABLE `xwx_photo_logs`  (
   INDEX `src_url`(`src_url`) USING BTREE,
   INDEX `photo_id`(`photo_id`) USING BTREE,
   INDEX `log_time`(`log_time`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for xwx_topic
+-- ----------------------------
+DROP TABLE IF EXISTS `xwx_topic`;
+CREATE TABLE `xwx_topic`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `topic_name` varchar(100) NOT NULL,
+  `create_time` int(11) UNSIGNED DEFAULT NULL,
+  `update_time` int(11) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  FULLTEXT KEY `fidx` (`topic_name`) with parser ngram,
 ) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
 
 INSERT INTO xwx_admin(username, `password`) VALUES('admin','123456')

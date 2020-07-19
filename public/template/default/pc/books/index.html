@@ -177,6 +177,25 @@
                     {/volist}
                 </ul>
             </div>
+
+            <div class="index-title">
+                <h2>推荐专题</h2>
+            </div>
+            <div class="index-manga">
+                <ul class="mh-list col7">
+                    {volist name="topics" id="vo"}
+                    <li>
+                        <div class="mh-item">
+                            <div class="mh-item-detali">
+                                <h2 class="title">
+                                    <a href="/topic/{$vo.id}" title="{$vo.topic_name}">{$vo.topic_name}</a>
+                                </h2>
+                            </div>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
         </div>
         <div class="view-comment-main" style="margin-top:5px;">
             <div class="top">
