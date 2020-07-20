@@ -13,7 +13,6 @@ Route::rule('/getUpdate', 'mobile/update/getBooks');
 Route::rule('/'.AUTHORCTRL.'/:id', 'mobile/authors/index');
 Route::rule('/article/:id', 'index/articles/index');
 Route::rule('/articlelist', 'index/articles/list');
-Route::rule('/topic/:id', 'index/topics/index');
 Route::rule('/addfavor', 'mobile/books/addfavor');
 Route::rule('/commentadd', 'mobile/books/commentadd');
 Route::rule('/login', 'mobile/account/login');

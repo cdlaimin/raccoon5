@@ -18,6 +18,5 @@ return [
     'promotionService' => \app\service\PromotionService::class,
     'tagsService' => \app\service\TagsService::class,
     'userService' => \app\service\UserService::class,
-    'articleService' => \app\service\ArticleService::class,
-    'topicService' => \app\service\TopicService::class
+    'articleService' => \app\service\ArticleService::class
 ];
