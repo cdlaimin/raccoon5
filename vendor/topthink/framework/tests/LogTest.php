@@ -7,15 +7,22 @@ use Mockery as m;
 use Mockery\MockInterface;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use think\App;
+use think\Config;
+use think\Container;
 use think\Log;
 use think\log\ChannelSet;
 
 class LogTest extends TestCase
 {
-    use InteractsWithApp;
+    /** @var App|MockInterface */
+    protected $app;
 
     /** @var Log|MockInterface */
     protected $log;
+
+    /** @var Config|MockInterface */
+    protected $config;
 
     protected function tearDown(): void
     {
@@ -24,7 +31,13 @@ class LogTest extends TestCase
 
     protected function setUp()
     {
-        $this->prepareApp();
+        $this->app = m::mock(App::class)->makePartial();
+        Container::setInstance($this->app);
+
+        $this->app->shouldReceive('make')->with(App::class)->andReturn($this->app);
+        $this->config = m::mock(Config::class)->makePartial();
+        $this->app->shouldReceive('get')->with('config')->andReturn($this->config);
+        $this->app->shouldReceive('runningInConsole')->andReturn(false);
 
         $this->log = new Log($this->app);
     }

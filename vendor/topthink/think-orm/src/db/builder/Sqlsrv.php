@@ -73,7 +73,7 @@ class Sqlsrv extends Builder
 
         foreach ($order as $key => $val) {
             if ($val instanceof Raw) {
-                $array[] = $this->parseRaw($query, $val);
+                $array[] = $val->getValue();
             } elseif ('[rand]' == $val) {
                 $array[] = $this->parseRand($query);
             } else {
@@ -115,7 +115,7 @@ class Sqlsrv extends Builder
         if (is_int($key)) {
             return (string) $key;
         } elseif ($key instanceof Raw) {
-            return $this->parseRaw($query, $key);
+            return $key->getValue();
         }
 
         $key = trim($key);

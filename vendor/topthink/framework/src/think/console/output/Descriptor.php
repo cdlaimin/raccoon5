@@ -216,7 +216,7 @@ class Descriptor
         $description        = new ConsoleDescription($console, $describedNamespace);
 
         if (isset($options['raw_text']) && $options['raw_text']) {
-            $width = $this->getColumnWidth($description->getNamespaces());
+            $width = $this->getColumnWidth($description->getCommands());
 
             foreach ($description->getCommands() as $command) {
                 $this->writeText(sprintf("%-${width}s %s", $command->getName(), $command->getDescription()), $options);
@@ -235,7 +235,7 @@ class Descriptor
             $this->writeText("\n");
             $this->writeText("\n");
 
-            $width = $this->getColumnWidth($description->getNamespaces());
+            $width = $this->getColumnWidth($description->getCommands());
 
             if ($describedNamespace) {
                 $this->writeText(sprintf('<comment>Available commands for the "%s" namespace:</comment>', $describedNamespace), $options);
@@ -282,18 +282,14 @@ class Descriptor
     }
 
     /**
-     * @param Namespaces[] $namespaces
+     * @param Command[] $commands
      * @return int
      */
-    private function getColumnWidth(array $namespaces)
+    private function getColumnWidth(array $commands)
     {
         $width = 0;
-        foreach ($namespaces as $namespace) {
-            foreach ($namespace['commands'] as $name) {
-                if (strlen($name) > $width) {
-                    $width = strlen($name);
-                }
-            }
+        foreach ($commands as $command) {
+            $width = strlen($command->getName()) > $width ? strlen($command->getName()) : $width;
         }
 
         return $width + 2;

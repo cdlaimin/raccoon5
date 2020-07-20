@@ -149,7 +149,7 @@ abstract class Builder
             $item = $this->parseKey($query, $key, true);
 
             if ($val instanceof Raw) {
-                $result[$item] = $this->parseRaw($query, $val);
+                $result[$item] = $val->getValue();
                 continue;
             } elseif (!is_scalar($val) && (in_array($key, (array) $query->getOptions('json')) || 'json' == $query->getFieldType($key))) {
                 $val = json_encode($val);
@@ -165,7 +165,7 @@ abstract class Builder
                 }
             } elseif (is_null($val)) {
                 $result[$item] = 'NULL';
-            } elseif (is_array($val) && !empty($val) && is_string($val[0])) {
+            } elseif (is_array($val) && !empty($val)) {
                 switch (strtoupper($val[0])) {
                     case 'INC':
                         $result[$item] = $item . ' + ' . floatval($val[1]);
@@ -195,7 +195,7 @@ abstract class Builder
     protected function parseDataBind(Query $query, string $key, $data, array $bind = []): string
     {
         if ($data instanceof Raw) {
-            return $this->parseRaw($query, $data);
+            return $data->getValue();
         }
 
         $name = $query->bindValue($data, $bind[$key] ?? PDO::PARAM_STR);
@@ -243,7 +243,7 @@ abstract class Builder
 
             foreach ($fields as $key => $field) {
                 if ($field instanceof Raw) {
-                    $array[] = $this->parseRaw($query, $field);
+                    $array[] = $field->getValue();
                 } elseif (!is_numeric($key)) {
                     $array[] = $this->parseKey($query, $key) . ' AS ' . $this->parseKey($query, $field, true);
                 } else {
@@ -273,7 +273,7 @@ abstract class Builder
 
         foreach ((array) $tables as $key => $table) {
             if ($table instanceof Raw) {
-                $item[] = $this->parseRaw($query, $table);
+                $item[] = $table->getValue();
             } elseif (!is_numeric($key)) {
                 $item[] = $this->parseKey($query, $key) . ' ' . $this->parseKey($query, $table);
             } elseif (isset($options['alias'][$table])) {
@@ -350,7 +350,7 @@ abstract class Builder
         $where = [];
         foreach ($val as $value) {
             if ($value instanceof Raw) {
-                $where[] = ' ' . $logic . ' ( ' . $this->parseRaw($query, $value) . ' )';
+                $where[] = ' ' . $logic . ' ( ' . $value->getValue() . ' )';
                 continue;
             }
 
@@ -368,10 +368,7 @@ abstract class Builder
 
             if ($value instanceof Closure) {
                 // 使用闭包查询
-                $whereClosureStr = $this->parseClosureWhere($query, $value, $logic);
-                if ($whereClosureStr) {
-                    $where[] = $whereClosureStr;
-                }
+                $where[] = $this->parseClosureWhere($query, $value, $logic);
             } elseif (is_array($field)) {
                 $where[] = $this->parseMultiWhereField($query, $value, $field, $logic, $binds);
             } elseif ($field instanceof Raw) {
@@ -577,7 +574,7 @@ abstract class Builder
     protected function parseExp(Query $query, string $key, string $exp, Raw $value, string $field, int $bindType): string
     {
         // 表达式查询
-        return '( ' . $key . ' ' . $this->parseRaw($query, $value) . ' )';
+        return '( ' . $key . ' ' . $value->getValue() . ' )';
     }
 
     /**
@@ -659,7 +656,7 @@ abstract class Builder
         if ($value instanceof Closure) {
             $value = $this->parseClosure($query, $value, false);
         } elseif ($value instanceof Raw) {
-            $value = $this->parseRaw($query, $value);
+            $value = $value->getValue();
         } else {
             throw new Exception('where express error:' . $value);
         }
@@ -753,7 +750,7 @@ abstract class Builder
         if ($value instanceof Closure) {
             $value = $this->parseClosure($query, $value, false);
         } elseif ($value instanceof Raw) {
-            $value = $this->parseRaw($query, $value);
+            $value = $value->getValue();
         } else {
             $value = array_unique(is_array($value) ? $value : explode(',', $value));
             $array = [];
@@ -891,7 +888,7 @@ abstract class Builder
         $array = [];
         foreach ($order as $key => $val) {
             if ($val instanceof Raw) {
-                $array[] = $this->parseRaw($query, $val);
+                $array[] = $val->getValue();
             } elseif (is_array($val) && preg_match('/^[\w\.]+$/', $key)) {
                 $array[] = $this->parseOrderField($query, $key, $val);
             } elseif ('[rand]' == $val) {
@@ -914,25 +911,6 @@ abstract class Builder
         }
 
         return empty($array) ? '' : ' ORDER BY ' . implode(',', $array);
-    }
-
-    /**
-     * 分析Raw对象
-     * @access protected
-     * @param  Query $query 查询对象
-     * @param  Raw   $raw   Raw对象
-     * @return string
-     */
-    protected function parseRaw(Query $query, Raw $raw): string
-    {
-        $sql  = $raw->getValue();
-        $bind = $raw->getBind();
-
-        if ($bind) {
-            $query->bindParams($sql, $bind);
-        }
-
-        return $sql;
     }
 
     /**

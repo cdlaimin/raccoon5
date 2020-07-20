@@ -114,7 +114,30 @@
                     {/volist}
                 </ul>
             </div>
+
+            <div class="sub-manga">
+                <h2 class="top">相关推荐</h2>
+                <ul class="list">
+                    {volist name="recommand" id="vo"}
+                    <li>
+                        <div class="cover">
+                            <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
+                                <img src="{$vo.cover_url}" alt="{$vo.book_name}">
+                            </a>
+                        </div>
+                        <div class="info">
+                            <p class="title">
+                                <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">{$vo.book_name}</a>
+                            </p>
+                            <p class="subtitle-new">{$vo.summary|subtext="15"}</p>
+                            <p class="tip"><span>评分:</span><span class="mh-star-line star-5"></span></p>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
         </div>
+      
         <div class="left-bar">
             <div id="tempc">
                 <div class="detail-list-title" id="detail-list-title">
@@ -154,23 +177,20 @@
                     </script>
                 </div>
                 {/if}
-            </div>
+            </div>         
+
             <div class="index-title">
-                <h2>相关推荐</h2>
+                <h2>推荐专题</h2>
             </div>
             <div class="index-manga">
                 <ul class="mh-list col7">
-                    {volist name="recommand" id="vo"}
+                    {volist name="topics" id="vo"}
                     <li>
                         <div class="mh-item">
-                            <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
-                                <p class="mh-cover" style="background-image: url({$vo.cover_url})"></p>
-                            </a>
                             <div class="mh-item-detali">
                                 <h2 class="title">
-                                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">{$vo.book_name}</a>
+                                    <a href="/topic/{$vo.id}" title="{$vo.topic_name}">{$vo.topic_name}</a>
                                 </h2>
-                                <p class="zl">{$vo.summary|subtext=13}...</p>                             
                             </div>
                         </div>
                     </li>

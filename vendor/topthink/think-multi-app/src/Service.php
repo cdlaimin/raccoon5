@@ -14,15 +14,12 @@ use think\Service as BaseService;
 
 class Service extends BaseService
 {
-    public function boot()
+    public function register()
     {
-        $this->app->event->listen('HttpRun', function () {
-            $this->app->middleware->add(MultiApp::class);
-        });
+        $this->app->middleware->unshift(MultiApp::class);
 
         $this->commands([
             'build' => command\Build::class,
-            'clear' => command\Clear::class,
         ]);
 
         $this->app->bind([

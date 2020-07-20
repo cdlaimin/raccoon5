@@ -109,6 +109,14 @@ class Books extends Base
             cache('bookClicks:' . $book->id, $clicks);
         }
 
+        $topics = cache('topics:'.md5($book->book_name));
+        if (!$topics) {
+            $topics = Db::query(
+                "select * from " . $this->prefix . "topic where match(topic_name) 
+            against ('" . $book->book_name . "') LIMIT 5");
+            cache('topics:'.md5($book->book_name), $topics, null, 'redis');
+        }
+
         View::assign([
             'book' => $book,
             'tags' => $tags,
@@ -118,7 +126,8 @@ class Books extends Base
             'isfavor' => $isfavor,
             'comments' => $comments,
             'start_pay' => $start_pay,
-            'clicks' => $clicks
+            'clicks' => $clicks,
+            'topics' => $topics
         ]);
         return view($this->tpl);
     }

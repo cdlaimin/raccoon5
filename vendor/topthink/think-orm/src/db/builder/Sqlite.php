@@ -68,7 +68,7 @@ class Sqlite extends Builder
         if (is_int($key)) {
             return (string) $key;
         } elseif ($key instanceof Raw) {
-            return $this->parseRaw($query, $key);
+            return $key->getValue();
         }
 
         $key = trim($key);

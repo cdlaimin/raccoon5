@@ -5,6 +5,9 @@ namespace think\tests;
 use Mockery as m;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use think\App;
+use think\Config;
+use think\Container;
 use think\Exception;
 use think\exception\Handle;
 use think\Middleware;
@@ -14,10 +17,14 @@ use think\Response;
 
 class MiddlewareTest extends TestCase
 {
-    use InteractsWithApp;
+    /** @var App|MockInterface */
+    protected $app;
 
     /** @var Middleware|MockInterface */
     protected $middleware;
+
+    /** @var Config|MockInterface */
+    protected $config;
 
     protected function tearDown(): void
     {
@@ -26,7 +33,13 @@ class MiddlewareTest extends TestCase
 
     protected function setUp()
     {
-        $this->prepareApp();
+        $this->app = m::mock(App::class)->makePartial();
+        Container::setInstance($this->app);
+
+        $this->app->shouldReceive('make')->with(App::class)->andReturn($this->app);
+        $this->config = m::mock(Config::class)->makePartial();
+        $this->app->shouldReceive('get')->with('config')->andReturn($this->config);
+        $this->app->shouldReceive('runningInConsole')->andReturn(false);
 
         $this->middleware = new Middleware($this->app);
     }

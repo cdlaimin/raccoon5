@@ -16,7 +16,9 @@ use Closure;
 use think\Container;
 use think\Exception;
 use think\Request;
+use think\Response;
 use think\Route;
+use think\route\dispatch\Response as ResponseDispatch;
 
 /**
  * 路由分组类
@@ -27,7 +29,16 @@ class RuleGroup extends Rule
      * 分组路由（包括子分组）
      * @var array
      */
-    protected $rules = [];
+    protected $rules = [
+        '*'       => [],
+        'get'     => [],
+        'post'    => [],
+        'put'     => [],
+        'patch'   => [],
+        'delete'  => [],
+        'head'    => [],
+        'options' => [],
+    ];
 
     /**
      * 分组路由规则
@@ -140,13 +151,15 @@ class RuleGroup extends Rule
         // 解析分组路由
         if ($this instanceof Resource) {
             $this->buildResourceRule();
+        } elseif ($this->rule instanceof Response) {
+            return new ResponseDispatch($request, $this, $this->rule);
         } else {
             $this->parseGroupRule($this->rule);
         }
 
         // 获取当前路由规则
         $method = strtolower($request->method());
-        $rules  = $this->getRules($method);
+        $rules  = $this->getMethodRules($method);
 
         if ($this->parent) {
             // 合并分组参数
@@ -170,7 +183,7 @@ class RuleGroup extends Rule
 
         // 检查分组路由
         foreach ($rules as $key => $item) {
-            $result = $item[1]->check($request, $url, $completeMatch);
+            $result = $item->check($request, $url, $completeMatch);
 
             if (false !== $result) {
                 return $result;
@@ -185,6 +198,17 @@ class RuleGroup extends Rule
         }
 
         return $result;
+    }
+
+    /**
+     * 获取当前请求的路由规则（包括子分组、资源路由）
+     * @access protected
+     * @param  string $method 请求类型
+     * @return array
+     */
+    protected function getMethodRules(string $method): array
+    {
+        return array_merge($this->rules[$method], $this->rules['*']);
     }
 
     /**
@@ -278,8 +302,7 @@ class RuleGroup extends Rule
         $regex = [];
         $items = [];
 
-        foreach ($rules as $key => $val) {
-            $item = $val[1];
+        foreach ($rules as $key => $item) {
             if ($item instanceof RuleItem) {
                 $rule = $depr . str_replace('/', $depr, $item->getRule());
                 if ($depr == $rule && $depr != $url) {
@@ -437,10 +460,10 @@ class RuleGroup extends Rule
             $method = '*';
         }
 
-        $this->rules[] = [$method, $rule];
+        $this->rules[$method][] = $rule;
 
         if ($rule instanceof RuleItem && 'options' != $method) {
-            $this->rules[] = ['options', $rule->setAutoOptions()];
+            $this->rules['options'][] = $rule->setAutoOptions();
         }
 
         return $this;
@@ -494,9 +517,7 @@ class RuleGroup extends Rule
             return $this->rules;
         }
 
-        return array_filter($this->rules, function ($item) use ($method) {
-            return $method == $item[0] || $item[0] == '*';
-        });
+        return $this->rules[strtolower($method)] ?? [];
     }
 
     /**
@@ -506,6 +527,15 @@ class RuleGroup extends Rule
      */
     public function clear(): void
     {
-        $this->rules = [];
+        $this->rules = [
+            '*'       => [],
+            'get'     => [],
+            'post'    => [],
+            'put'     => [],
+            'patch'   => [],
+            'delete'  => [],
+            'head'    => [],
+            'options' => [],
+        ];
     }
 }

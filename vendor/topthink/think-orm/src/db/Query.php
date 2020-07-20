@@ -33,7 +33,11 @@ class Query extends BaseQuery
      */
     public function orderRaw(string $field, array $bind = [])
     {
-        $this->options['order'][] = new Raw($field, $bind);
+        if (!empty($bind)) {
+            $this->bindParams($field, $bind);
+        }
+
+        $this->options['order'][] = new Raw($field);
 
         return $this;
     }
@@ -105,6 +109,34 @@ class Query extends BaseQuery
         $this->options['table'] = new Raw($table);
 
         return $this;
+    }
+
+    /**
+     * 执行查询 返回数据集
+     * @access public
+     * @param string $sql  sql指令
+     * @param array  $bind 参数绑定
+     * @return array
+     * @throws BindParamException
+     * @throws PDOException
+     */
+    public function query(string $sql, array $bind = []): array
+    {
+        return $this->connection->query($this, $sql, $bind);
+    }
+
+    /**
+     * 执行语句
+     * @access public
+     * @param string $sql  sql指令
+     * @param array  $bind 参数绑定
+     * @return int
+     * @throws BindParamException
+     * @throws PDOException
+     */
+    public function execute(string $sql, array $bind = []): int
+    {
+        return $this->connection->execute($this, $sql, $bind, true);
     }
 
     /**

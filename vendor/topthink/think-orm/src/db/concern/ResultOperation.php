@@ -12,14 +12,10 @@ declare (strict_types = 1);
 
 namespace think\db\concern;
 
-use Closure;
 use think\Collection;
 use think\db\exception\DataNotFoundException;
-use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\db\Query;
 use think\helper\Str;
-use think\Model;
 
 /**
  * 查询数据处理
@@ -107,7 +103,6 @@ trait ResultOperation
      */
     protected function filterResult(&$result): void
     {
-        $array = [];
         if (!empty($this->options['visible'])) {
             foreach ($this->options['visible'] as $key) {
                 $array[] = $key;
@@ -227,6 +222,9 @@ trait ResultOperation
      * @access public
      * @param array|string|Query|Closure $data 数据
      * @return array|Model
+     * @throws DbException
+     * @throws ModelNotFoundException
+     * @throws DataNotFoundException
      */
     public function selectOrFail($data = null)
     {
@@ -238,6 +236,9 @@ trait ResultOperation
      * @access public
      * @param array|string|Query|Closure $data 数据
      * @return array|Model
+     * @throws DbException
+     * @throws ModelNotFoundException
+     * @throws DataNotFoundException
      */
     public function findOrFail($data = null)
     {

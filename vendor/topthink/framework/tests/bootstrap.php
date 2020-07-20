@@ -1,3 +1,3 @@
 <?php
 
-include __DIR__.'/../src/helper.php';
+require __DIR__.'/../vendor/autoload.php';

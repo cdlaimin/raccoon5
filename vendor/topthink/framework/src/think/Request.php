@@ -12,7 +12,6 @@ declare (strict_types = 1);
 
 namespace think;
 
-use ArrayAccess;
 use think\file\UploadedFile;
 use think\route\Rule;
 
@@ -20,7 +19,7 @@ use think\route\Rule;
  * 请求管理类
  * @package think
  */
-class Request implements ArrayAccess
+class Request
 {
     /**
      * 兼容PATH_INFO获取
@@ -899,8 +898,7 @@ class Request implements ArrayAccess
      */
     public function setRoute(array $route)
     {
-        $this->route      = array_merge($this->route, $route);
-        $this->mergeParam = false;
+        $this->route = array_merge($this->route, $route);
         return $this;
     }
 
@@ -987,7 +985,7 @@ class Request implements ArrayAccess
     protected function getInputData($content): array
     {
         $contentType = $this->contentType();
-        if ('application/x-www-form-urlencoded' == $contentType) {
+        if ($contentType == 'application/x-www-form-urlencoded') {
             parse_str($content, $data);
             return $data;
         } elseif (false !== strpos($contentType, 'json')) {
@@ -1756,7 +1754,7 @@ class Request implements ArrayAccess
         if ($this->host) {
             $host = $this->host;
         } else {
-            $host = strval($this->server('HTTP_X_FORWARDED_HOST') ?: $this->server('HTTP_HOST'));
+            $host = strval($this->server('HTTP_X_REAL_HOST') ?: $this->server('HTTP_HOST'));
         }
 
         return true === $strict && strpos($host, ':') ? strstr($host, ':', true) : $host;
@@ -1769,7 +1767,7 @@ class Request implements ArrayAccess
      */
     public function port(): int
     {
-        return (int) ($this->server('HTTP_X_FORWARDED_PORT') ?: $this->server('SERVER_PORT', ''));
+        return (int) $this->server('SERVER_PORT', '');
     }
 
     /**
@@ -2128,22 +2126,4 @@ class Request implements ArrayAccess
     {
         return isset($this->middleware[$name]);
     }
-
-    // ArrayAccess
-    public function offsetExists($name): bool
-    {
-        return $this->has($name);
-    }
-
-    public function offsetGet($name)
-    {
-        return $this->param($name);
-    }
-
-    public function offsetSet($name, $value)
-    {}
-
-    public function offsetUnset($name)
-    {}
-
 }

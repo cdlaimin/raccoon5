@@ -108,6 +108,15 @@ class EventTest extends TestCase
         $this->event->trigger('bar');
     }
 
+    public function testWithoutEvent()
+    {
+        $this->event->withEvent(false);
+
+        $this->event->listen('SomeListener', TestListener::class);
+
+        $this->assertFalse($this->event->hasListener('SomeListener'));
+    }
+
 }
 
 class TestListener

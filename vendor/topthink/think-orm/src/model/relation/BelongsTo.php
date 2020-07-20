@@ -69,7 +69,7 @@ class BelongsTo extends OneToOne
         if ($relationModel) {
             if (!empty($this->bindAttr)) {
                 // 绑定关联属性
-                $this->bindAttr($this->parent, $relationModel);
+                $this->bindAttr($relationModel, $this->parent);
             }
 
             $relationModel->setParent(clone $this->parent);
@@ -233,9 +233,9 @@ class BelongsTo extends OneToOne
                     $relationModel->exists(true);
                 }
 
-                if (!empty($this->bindAttr)) {
+                if ($relationModel && !empty($this->bindAttr)) {
                     // 绑定关联属性
-                    $this->bindAttr($result, $relationModel);
+                    $this->bindAttr($relationModel, $result);
                 } else {
                     // 设置关联属性
                     $result->setRelation($relation, $relationModel);
@@ -274,9 +274,9 @@ class BelongsTo extends OneToOne
             $relationModel->exists(true);
         }
 
-        if (!empty($this->bindAttr)) {
+        if ($relationModel && !empty($this->bindAttr)) {
             // 绑定关联属性
-            $this->bindAttr($result, $relationModel);
+            $this->bindAttr($relationModel, $result);
         } else {
             // 设置关联属性
             $result->setRelation($relation, $relationModel);

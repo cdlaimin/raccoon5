@@ -90,14 +90,14 @@ class Socket implements LogHandlerInterface
 
         if ($this->config['debug']) {
             if ($this->app->exists('request')) {
-                $currentUri = $this->app->request->url(true);
+                $current_uri = $this->app->request->url(true);
             } else {
-                $currentUri = 'cmd:' . implode(' ', $_SERVER['argv'] ?? []);
+                $current_uri = 'cmd:' . implode(' ', $_SERVER['argv'] ?? []);
             }
 
             if (!empty($this->config['format_head'])) {
                 try {
-                    $currentUri = $this->app->invoke($this->config['format_head'], [$currentUri]);
+                    $current_uri = $this->app->invoke($this->config['format_head'], [$current_uri]);
                 } catch (NotFoundExceptionInterface $notFoundException) {
                     // Ignore exception
                 }
@@ -106,16 +106,16 @@ class Socket implements LogHandlerInterface
             // 基本信息
             $trace[] = [
                 'type' => 'group',
-                'msg'  => $currentUri,
+                'msg'  => $current_uri,
                 'css'  => $this->css['page'],
             ];
         }
 
-        $expandLevel = array_flip($this->config['expand_level']);
+        $expand_level = array_flip($this->config['expand_level']);
 
         foreach ($log as $type => $val) {
             $trace[] = [
-                'type' => isset($expandLevel[$type]) ? 'group' : 'groupCollapsed',
+                'type' => isset($expand_level[$type]) ? 'group' : 'groupCollapsed',
                 'msg'  => '[ ' . $type . ' ]',
                 'css'  => $this->css[$type] ?? '',
             ];
@@ -166,18 +166,18 @@ class Socket implements LogHandlerInterface
 
         $tabid = $this->getClientArg('tabid');
 
-        if (!$clientId = $this->getClientArg('client_id')) {
-            $clientId = '';
+        if (!$client_id = $this->getClientArg('client_id')) {
+            $client_id = '';
         }
 
         if (!empty($this->allowForceClientIds)) {
             //强制推送到多个client_id
-            foreach ($this->allowForceClientIds as $forceClientId) {
-                $clientId = $forceClientId;
-                $this->sendToClient($tabid, $clientId, $trace, $forceClientId);
+            foreach ($this->allowForceClientIds as $force_client_id) {
+                $client_id = $force_client_id;
+                $this->sendToClient($tabid, $client_id, $trace, $force_client_id);
             }
         } else {
-            $this->sendToClient($tabid, $clientId, $trace, '');
+            $this->sendToClient($tabid, $client_id, $trace, '');
         }
 
         return true;
@@ -188,21 +188,21 @@ class Socket implements LogHandlerInterface
      * @access protected
      * @author Zjmainstay
      * @param  $tabid
-     * @param  $clientId
+     * @param  $client_id
      * @param  $logs
-     * @param  $forceClientId
+     * @param  $force_client_id
      */
-    protected function sendToClient($tabid, $clientId, $logs, $forceClientId)
+    protected function sendToClient($tabid, $client_id, $logs, $force_client_id)
     {
         $logs = [
             'tabid'           => $tabid,
-            'client_id'       => $clientId,
+            'client_id'       => $client_id,
             'logs'            => $logs,
-            'force_client_id' => $forceClientId,
+            'force_client_id' => $force_client_id,
         ];
 
         $msg     = json_encode($logs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
-        $address = '/' . $clientId; //将client_id作为地址， server端通过地址判断将日志发布给谁
+        $address = '/' . $client_id; //将client_id作为地址， server端通过地址判断将日志发布给谁
 
         $this->send($this->config['host'], $this->config['port'], $msg, $address);
     }
@@ -222,17 +222,17 @@ class Socket implements LogHandlerInterface
         }
 
         //用户认证
-        $allowClientIds = $this->config['allow_client_ids'];
+        $allow_client_ids = $this->config['allow_client_ids'];
 
-        if (!empty($allowClientIds)) {
+        if (!empty($allow_client_ids)) {
             //通过数组交集得出授权强制推送的client_id
-            $this->allowForceClientIds = array_intersect($allowClientIds, $this->config['force_client_ids']);
+            $this->allowForceClientIds = array_intersect($allow_client_ids, $this->config['force_client_ids']);
             if (!$tabid && count($this->allowForceClientIds)) {
                 return true;
             }
 
-            $clientId = $this->getClientArg('client_id');
-            if (!in_array($clientId, $allowClientIds)) {
+            $client_id = $this->getClientArg('client_id');
+            if (!in_array($client_id, $allow_client_ids)) {
                 return false;
             }
         } else {

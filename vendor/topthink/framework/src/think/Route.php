@@ -15,7 +15,6 @@ namespace think;
 use Closure;
 use think\exception\RouteNotFoundException;
 use think\route\Dispatch;
-use think\route\dispatch\Callback;
 use think\route\dispatch\Url as UrlDispatch;
 use think\route\Domain;
 use think\route\Resource;
@@ -121,7 +120,7 @@ class Route
 
     /**
      * 域名对象
-     * @var Domain[]
+     * @var array
      */
     protected $domains = [];
 
@@ -135,7 +134,7 @@ class Route
      * 路由是否延迟解析
      * @var bool
      */
-    protected $lazy = false;
+    protected $lazy = true;
 
     /**
      * 路由是否测试模式
@@ -434,7 +433,7 @@ class Route
      * 批量导入路由标识
      * @access public
      * @param array $name 路由标识
-     * @return void
+     * @return $this
      */
     public function import(array $name): void
     {
@@ -511,12 +510,6 @@ class Route
      */
     public function rule(string $rule, $route = null, string $method = '*'): RuleItem
     {
-        if ($route instanceof Response) {
-            // 兼容之前的路由到响应对象，感觉不需要，使用场景很少，闭包就能实现
-            $route = function () use ($route) {
-                return $route;
-            };
-        }
         return $this->group->addRule($rule, $route, $method);
     }
 
@@ -665,9 +658,7 @@ class Route
      */
     public function view(string $rule, string $template = '', array $vars = []): RuleItem
     {
-        return $this->rule($rule, function () use ($vars, $template) {
-            return Response::create($template, 'view')->assign($vars);
-        }, 'GET');
+        return $this->rule($rule, $template, 'GET')->view($vars);
     }
 
     /**
@@ -680,9 +671,7 @@ class Route
      */
     public function redirect(string $rule, string $route = '', int $status = 301): RuleItem
     {
-        return $this->rule($rule, function () use ($status, $route) {
-            return Response::create($route, 'redirect')->code($status);
-        }, '*');
+        return $this->rule($rule, $route, '*')->redirect()->status($status);
     }
 
     /**
@@ -733,10 +722,10 @@ class Route
     /**
      * 路由调度
      * @param Request $request
-     * @param Closure|bool $withRoute
+     * @param Closure $withRoute
      * @return Response
      */
-    public function dispatch(Request $request, $withRoute = true)
+    public function dispatch(Request $request, $withRoute = null)
     {
         $this->request = $request;
         $this->host    = $this->request->host(true);
@@ -744,9 +733,7 @@ class Route
 
         if ($withRoute) {
             //加载路由
-            if ($withRoute instanceof Closure) {
-                $withRoute();
-            }
+            $withRoute();
             $dispatch = $this->check();
         } else {
             $dispatch = $this->url($this->path());
@@ -764,10 +751,10 @@ class Route
     /**
      * 检测URL路由
      * @access public
-     * @return Dispatch|false
+     * @return Dispatch
      * @throws RouteNotFoundException
      */
-    public function check()
+    public function check(): Dispatch
     {
         // 自动检测域名路由
         $url = str_replace($this->config['pathinfo_depr'], '|', $this->path());
@@ -820,15 +807,8 @@ class Route
      * @param string $url URL地址
      * @return Dispatch
      */
-    public function url(string $url): Dispatch
+    public function url(string $url): UrlDispatch
     {
-        if ($this->request->method() == 'OPTIONS') {
-            // 自动响应options请求
-            return new Callback($this->request, $this->group, function () {
-                return Response::create('', 'html', 204)->header(['Allow' => 'GET, POST, PUT, DELETE']);
-            });
-        }
-
         return new UrlDispatch($this->request, $this->group, $url);
     }
 

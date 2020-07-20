@@ -18,9 +18,13 @@ use think\middleware\AllowCrossDomain;
 use think\middleware\CheckRequestCache;
 use think\middleware\FormTokenCheck;
 use think\Request;
+use think\Response;
 use think\Route;
 use think\route\dispatch\Callback as CallbackDispatch;
 use think\route\dispatch\Controller as ControllerDispatch;
+use think\route\dispatch\Redirect as RedirectDispatch;
+use think\route\dispatch\Response as ResponseDispatch;
+use think\route\dispatch\View as ViewDispatch;
 
 /**
  * 路由规则基础类
@@ -501,14 +505,36 @@ abstract class Rule
     }
 
     /**
-     * 路由到一个模板地址 需要额外传入的模板变量
+     * 当前路由到一个模板地址 当使用数组的时候可以传入模板变量
      * @access public
-     * @param  array $view 视图
+     * @param  bool|array $view 视图
      * @return $this
      */
-    public function view(array $view = [])
+    public function view($view = true)
     {
         return $this->setOption('view', $view);
+    }
+
+    /**
+     * 当前路由为重定向
+     * @access public
+     * @param  bool $redirect 是否为重定向
+     * @return $this
+     */
+    public function redirect(bool $redirect = true)
+    {
+        return $this->setOption('redirect', $redirect);
+    }
+
+    /**
+     * 设置status
+     * @access public
+     * @param  int $status 状态码
+     * @return $this
+     */
+    public function status(int $status)
+    {
+        return $this->setOption('status', $status);
     }
 
     /**
@@ -625,14 +651,20 @@ abstract class Rule
      */
     protected function dispatch(Request $request, $route, array $option): Dispatch
     {
-        if (is_subclass_of($route, Dispatch::class)) {
-            $result = new $route($request, $this, $route, $this->vars);
+        if ($route instanceof Dispatch) {
+            $result = $route;
         } elseif ($route instanceof Closure) {
             // 执行闭包
             $result = new CallbackDispatch($request, $this, $route, $this->vars);
-        } elseif (false !== strpos($route, '@') || false !== strpos($route, '::')) {
+        } elseif ($route instanceof Response) {
+            $result = new ResponseDispatch($request, $this, $route);
+        } elseif (isset($option['view']) && false !== $option['view']) {
+            $result = new ViewDispatch($request, $this, $route, is_array($option['view']) ? $option['view'] : $this->vars);
+        } elseif (!empty($option['redirect'])) {
+            // 路由到重定向地址
+            $result = new RedirectDispatch($request, $this, $route, $this->vars, $option['status'] ?? 301);
+        } elseif (false !== strpos($route, '\\')) {
             // 路由到类的方法
-            $route  = str_replace('::', '@', $route);
             $result = $this->dispatchMethod($request, $route);
         } else {
             // 路由到控制器/操作

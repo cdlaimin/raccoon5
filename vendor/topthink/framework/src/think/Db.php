@@ -15,7 +15,6 @@ namespace think;
 /**
  * 数据库管理类
  * @package think
- * @property Config $config
  */
 class Db extends DbManager
 {
@@ -33,9 +32,7 @@ class Db extends DbManager
         $db->setConfig($config);
         $db->setEvent($event);
         $db->setLog($log);
-
-        $store = $db->getConfig('cache_store');
-        $db->setCache($cache->store($store));
+        $db->setCache($cache);
         $db->triggerSql();
 
         return $db;
