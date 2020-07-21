@@ -31,7 +31,7 @@ class Topics extends Base
 
         $books = cache('topic:books:'.$id);
         if (!$books) {
-            $books = $this->bookService->search($topic->topic_name, 28, $this->end_point);
+            $books = $this->bookService->search($topic->topic_name, 21, $this->prefix);
             foreach ($books as &$book) {
                 if ($this->end_point == 'id') {
                     $book['param'] = $book['id'];
