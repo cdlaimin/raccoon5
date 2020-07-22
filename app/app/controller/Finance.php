@@ -11,7 +11,6 @@ use app\model\UserBuy;
 use app\model\UserFinance;
 use app\model\UserOrder;
 use app\pay\Pay;
-use app\service\FinanceService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\Cache;

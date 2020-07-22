@@ -8,7 +8,6 @@ use app\common\RedisHelper;
 use app\model\Area;
 use app\model\Author;
 use app\model\Book;
-use app\model\Chapter;
 use app\model\Comments;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;

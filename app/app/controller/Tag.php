@@ -20,6 +20,7 @@ class Tag extends Base
 
         $result = [
             'success' => 1,
+
             'tags' => $tags
         ];
         return json($result);

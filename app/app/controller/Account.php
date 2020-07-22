@@ -66,6 +66,7 @@ class Account extends Base
                     "vip_expire_time" => $user->vip_expire_time,
                     "nick_name" => $user->nick_name,
                     "mobile" => $user->mobile,
+                    "email" => $user->email,
                     "balance" => $balance
                 ];
                 $utoken = JWT::encode($token, $key, "HS256");
@@ -74,6 +75,7 @@ class Account extends Base
                 $userInfo['username'] = $user->username;
                 $userInfo['nick_name'] = $user->nick_name;
                 $userInfo['mobile'] = $user->mobile;
+                $userInfo['email'] = $user->email;
                 $userInfo['vip_expire_time'] = $user->vip_expire_time;
                 $userInfo['utoken'] = $utoken;
                 $userInfo['balance'] = $balance;
@@ -96,13 +98,5 @@ class Account extends Base
             $json = json(['success' => 0, 'msg' => '传递参数错误']);
         }
         return $json;
-    }
-
-    public function logout()
-    {
-        $uid = input('uid');
-        $redis = RedisHelper::GetInstance();
-        $redis->del('utoken:' . $uid);
-        return ['success' => 1, 'msg' => '登出成功'];
     }
 }
