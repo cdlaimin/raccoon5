@@ -5,6 +5,7 @@ namespace app\admin\controller;
 
 
 use app\model\Topic;
+use Overtrue\Pinyin\Pinyin;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
@@ -89,5 +90,44 @@ class Topics extends BaseAdmin
         } else {
             return view();
         }
+    }
+
+    public function baidudrop()
+    {
+        return view();
+    }
+
+    public function getkeywords() {
+        $pinyin = new Pinyin();
+        $keyword = input('keyword');
+        $res = file_get_contents('http://suggestion.baidu.com/su?wd=' . $keyword);
+        $data = mb_convert_encoding($res, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
+        $data_temp = strpos($data, "x");
+        $data = substr_replace($data, "", $data_temp, 17);
+        $data = trim($data, ");");
+        $data = trim($data, "{");
+        $data = preg_replace("/q:.+?.e,/", '', $data);
+        $data = str_replace("[", "", $data);
+        $data = str_replace("]", "", $data);
+        $data = "[" . $data . "]";
+        $data = str_replace(",", "},s:", $data);
+        $data = str_replace("s:", "{\"s\":", $data);//复杂的处理，以符合json格式
+        $dc=json_decode($data, true);
+        foreach ($dc as $item) {
+            $line = $item['s'];
+            $topic = Topic::where('topic_name','=',trim($line))->find();
+            if (is_null($topic)) {
+                $topic = Topic::where('topic_name','=',trim($line))->find();
+                if (is_null($topic)) {
+                    $topic = new Topic();
+                    $topic->topic_name = trim($line);
+                    $topic->save();
+                    echo '<br>成功导入关键词'.$line;
+                    ob_flush(); //将 php buffer 数据强制输出到 tcp buffer
+                    flush(); // 将 tcp buffer 数据强制输出到浏览器
+                }
+            }
+        }
+        echo '导入完成';
     }
 }
