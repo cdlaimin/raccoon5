@@ -22,7 +22,7 @@ class BaseAuth extends Base
             } catch (ExpiredException $e) {
                 return json(['success' => 0, 'msg' => '请先登录'])->send();
             } catch (\Exception $e) {
-                return json(['success' => 0, 'msg' => $e->getMessage()])->send();
+                return json(['success' => 0, 'msg' => '请先登录'])->send();
             }
         } else {
             return json(['success' => 0, 'msg' => '用户未登录'])->send();

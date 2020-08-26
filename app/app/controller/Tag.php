@@ -20,7 +20,6 @@ class Tag extends Base
 
         $result = [
             'success' => 1,
-
             'tags' => $tags
         ];
         return json($result);
@@ -72,6 +71,20 @@ class Tag extends Base
             'success' => 1,
             'books' => $books,
             'count' => count($books)
+        ]);
+    }
+
+    public function getTops() {
+        $tops = cache('topsHomepage');
+        if (!$tops) {
+            $where[] = ['is_top', '=', '1'];
+            $tops = Book::with(['chapters','author'])->where($where)
+                ->limit(30)->order('id', 'desc')->select();
+            cache('topsHomepage', $tops, null, 'redis');
+        }
+        return json([
+            'success' => 1,
+            'tops' => $tops
         ]);
     }
 

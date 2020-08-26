@@ -38,7 +38,7 @@ class Base extends BaseController
         $this->links = cache('friendshipLink');
         $this->url = config('site.schema').config('site.domain');
         if (!$this->links){
-
+            $this->links = FriendshipLink::select();
             cache('friendshipLink',$this->links,null,'redis');
         }
         View::assign([
