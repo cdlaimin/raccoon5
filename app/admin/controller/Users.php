@@ -169,7 +169,6 @@ class Users extends BaseAdmin
         } catch (ModelNotFoundException $e) {
             abort(404, $e->getMessage());
         }
-
     }
 
     public function deleteAll()

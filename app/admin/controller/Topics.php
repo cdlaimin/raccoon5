@@ -112,6 +112,11 @@ class Topics extends BaseAdmin
         $data = "[" . $data . "]";
         $data = str_replace(",", "},s:", $data);
         $data = str_replace("s:", "{\"s\":", $data);//复杂的处理，以符合json格式
+
+        if(strpos($data, "window.baidu.sug") !== false) {
+            $data = str_replace("window.baidu.sug({", "", $data);
+        }
+
         $dc=json_decode($data, true);
         foreach ($dc as $item) {
             $line = $item['s'];
@@ -129,5 +134,23 @@ class Topics extends BaseAdmin
             }
         }
         echo '导入完成';
+    }
+
+    public function delete()
+    {
+        $id = input('id');
+        try {
+            $topic = Topic::findOrFail($id);
+            $result = $topic->delete();
+            if ($result) {
+                return ['err' => 0, 'msg' => '删除成功'];
+            } else {
+                return ['err' => 1, 'msg' => '删除失败'];
+            }
+        } catch (DataNotFoundException $e) {
+            abort(404, $e->getMessage());
+        } catch (ModelNotFoundException $e) {
+            abort(404, $e->getMessage());
+        }
     }
 }
