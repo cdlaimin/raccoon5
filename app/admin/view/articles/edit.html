@@ -1,15 +1,16 @@
 {extend name="pub/base2" /}
 {block name="title"}
-<title>漫画新增</title>
+<title>漫画编辑</title>
 {/block}
 
 {block name="body"}
 <article class="clearfix pd-20">
-    <form action="{:url('create')}" method="post" class="form form-horizontal" enctype="multipart/form-data">
+    <form action="{:url('edit')}" method="post" class="form form-horizontal" enctype="multipart/form-data">
+        <input type="hidden" value="{$article.id}" name="id">
         <div class="row clearfix">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>标题：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" name="title">
+                <input type="text" class="input-text" value="{$article.title}" name="title">
             </div>
         </div>
 
@@ -18,7 +19,7 @@
             <label class="form-label col-xs-4 col-sm-3">简介：</label>
             <div class="formControls col-xs-8 col-sm-9">
                 <textarea name="desc" cols="" rows="" class="textarea" dragonfly="true"
-                          onKeyUp="textarealength(this,100)"></textarea>
+                          onKeyUp="textarealength(this,100)">{$article.desc}</textarea>
                 <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
             </div>
         </div>
@@ -40,7 +41,7 @@
         <div class="row clearfix">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>关联漫画ID：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" name="book_id">
+                <input type="text" class="input-text" value="{$article.book_id}" name="book_id">
             </div>
         </div>
 
@@ -58,6 +59,10 @@
 <script>
     $(function () {
         var ue = UE.getEditor('articleEditor');
+        ue.ready(function(){
+            //设置编辑器的内容
+            ue.setContent('{$content}');
+        });
         $("form").validate({
             rules: {
                 title: {

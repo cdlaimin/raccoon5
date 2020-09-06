@@ -4,6 +4,7 @@
 namespace app\index\controller;
 
 use app\model\Article;
+use app\model\Book;
 use think\db\exception\ModelNotFoundException;
 use think\facade\App;
 use think\facade\Db;
@@ -38,12 +39,15 @@ class Articles extends Base
             }
         }
         $content = file_get_contents(App::getRootPath() . 'public/' . $article->content_url);
-        $articles = Article::order('id', 'desc')->limit(10)->cache('topArticles')->select();
-        foreach ($articles as &$val) {
-            if ($this->end_point == 'id') {
-                $val['param'] = $val['id'];
-            } else {
-                $val['param'] = $val['unique_id'];
+        $articles = cache('recommend:articles');
+        if (!$articles) {
+            $articles = Article::order('id', 'desc')->limit(10)->cache('topArticles')->select();
+            foreach ($articles as &$val) {
+                if ($this->end_point == 'id') {
+                    $val['param'] = $val['id'];
+                } else {
+                    $val['param'] = $val['unique_id'];
+                }
             }
         }
 
@@ -52,7 +56,6 @@ class Articles extends Base
             $updates = $this->bookService->getBooks($this->end_point, 'last_time', [], 20);
             cache('updateBooks', $updates, null, 'redis');
         }
-
 
         View::assign([
             'article' => $article,

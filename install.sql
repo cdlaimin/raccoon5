@@ -313,6 +313,7 @@ CREATE TABLE `xwx_article`  (
   `unique_id` char(100) DEFAULT NULL,
   `title` varchar(200) NOT NULL,
   `content_url` varchar(200) NOT NULL,
+  `cover_url` varchar(255) DEFAULT '' COMMENT '封面图路径',
   `desc` text,
   `book_id` int(10) UNSIGNED DEFAULT NULL,
   `create_time` int(10) UNSIGNED DEFAULT NULL,

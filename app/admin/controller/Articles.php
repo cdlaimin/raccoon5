@@ -7,7 +7,10 @@ namespace app\admin\controller;
 use app\model\Article;
 use app\model\Book;
 use Overtrue\Pinyin\Pinyin;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\ModelNotFoundException;
 use think\Exception;
+use think\exception\ValidateException;
 use think\facade\App;
 use think\facade\Db;
 use think\facade\View;
@@ -46,11 +49,73 @@ class Articles extends BaseAdmin
             $savename = md5($title) . '.txt';
             file_put_contents($dir . $savename, $content);
             $article['content_url'] = '/static/upload/article/' . $savename;
+
+            $cover = request()->file('cover');
+            try {
+                validate(['image'=>'filesize:10240|fileExt:jpg,png,gif'])
+                    ->check((array)$cover);
+                $cover_name =str_replace ( '\\', '/',
+                    \think\facade\Filesystem::disk('public')->putFile($dir, $cover));
+                if (!is_null($cover_name)) {
+                    $article['cover_url'] = '/static/upload/'.$cover_name;
+                }
+            } catch (ValidateException $e) {
+                abort(404, $e->getMessage());
+            }
             $article->save();
             $this->success('添加成功', 'index', 1);
         }
         return view();
     }
+
+    public function edit()
+    {
+        try {
+            $article = Article::findOrFail(input('id'));
+            if (request()->isPost()) {
+                $title = trim(input('title'));
+                $article = new Article();
+                $article['title'] = $title;
+                $article['unique_id'] = $this->convert($title);
+                $article['desc'] = input('desc');
+                $article['book_id'] = input('book_id');
+                $content = input('content');
+                $dir = App::getRootPath() . 'public/static/upload/article/';
+                $savename = md5($title) . '.txt';
+                file_put_contents($dir . $savename, $content);
+                $article['content_url'] = '/static/upload/article/' . $savename;
+
+                if (request()->file() != null) {
+                    $cover = request()->file('cover');
+                    try {
+                        validate(['image'=>'filesize:10240|fileExt:jpg,png,gif'])
+                            ->check((array)$cover);
+                        $cover_name =str_replace ( '\\', '/',
+                            \think\facade\Filesystem::disk('public')->putFile($dir, $cover));
+                        if (!is_null($cover_name)) {
+                            $article['cover_url'] = '/static/upload/'.$cover_name;
+                        }
+                    } catch (ValidateException $e) {
+                        abort(404, $e->getMessage());
+                    }
+                }
+
+                $article->save();
+                $this->success('编辑成功', 'index', 1);
+            }
+
+            $content = file_get_contents(App::getRootPath() . 'public/' . $article->content_url);
+            View::assign('content', $content);
+        } catch (DataNotFoundException $e) {
+            abort(404, $e->getMessage());
+        } catch (ModelNotFoundException $e) {
+            abort(404, $e->getMessage());
+        }
+
+
+        return view();
+    }
+
 
     public function match()
     {
