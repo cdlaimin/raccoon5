@@ -125,7 +125,7 @@ class Index extends Base
         $books = cache('searchresult:' . $keyword);
         if (!$books) {
             //$num = config('page.search_result_pc');
-            $books = $this->bookService->search($keyword, 20, $this->prefix);
+            $books = $this->bookService->search($keyword, 20);
             cache('searchresult:' . $keyword, $books, null, 'redis');
         }
         foreach ($books as &$book) {

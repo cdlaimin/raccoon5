@@ -102,7 +102,7 @@ class Books extends Base
         }
         $books = cache('appsearchresult:' . $keyword);
         if (!$books) {
-            $books = $this->bookService->search($keyword, 20, $this->prefix);
+            $books = $this->bookService->search($keyword, 20);
             foreach ($books as &$book) {
                 $author = Author::find($book['author_id']);
                 if ($author) {

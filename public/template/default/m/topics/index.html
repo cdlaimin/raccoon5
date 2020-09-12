@@ -8,14 +8,6 @@
     <div class="manga-list-bar" id="end">
         <a class="manga-list-bar-item">{$topic.topic_name}</a>
 
-        <a class="manga-list-bar-right " id="manga-list-bar-right">推荐</a>
-        <div class="manga-list-bar-right-down" id="manga-list-bar-right-down" style="display:none;overflow-y: scroll;">
-            {volist name="topics" id="vo"}
-            <div>
-                <a class="manga-list-bar-right-down-item" href="/topic/{$vo.id}">{$vo.topic_name}</a>
-            </div>
-            {/volist}
-        </div>
     </div>
     <div class="manga-list" style="border:none;background-color:#f8f8f8;padding-top: 87px;">
         <ul class="manga-list-2" >

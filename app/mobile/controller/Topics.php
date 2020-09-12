@@ -31,7 +31,7 @@ class Topics extends Base
 
         $books = cache('topic:books:'.$id);
         if (!$books) {
-            $books = $this->bookService->search($topic->topic_name, 21, $this->prefix);
+            $books = $this->bookService->search($topic->topic_name, 21);
             foreach ($books as &$book) {
                 if ($this->end_point == 'id') {
                     $book['param'] = $book['id'];
@@ -40,20 +40,18 @@ class Topics extends Base
                 }
             }
         }
-        cache('topic:books:'.$id, $books, null, 'redis');
-
-        $topics = cache('topics:'.md5($topic->topic_name));
-        if (!$topics) {
-            $topics = Db::query(
-                "select * from " . $this->prefix . "topic where match(topic_name) 
-            against ('" . $topic->topic_name . "') LIMIT 5");
-            cache('topics:'.md5($topic->topic_name), $topics, null, 'redis');
-        }
+//        cache('topic:books:'.$id, $books, null, 'redis');
+//        $topics = cache('topics:'.md5($topic->topic_name));
+//        if (!$topics) {
+//            $topics = Db::query(
+//                "select * from " . $this->prefix . "topic where match(topic_name)
+//            against ('" . $topic->topic_name . "') LIMIT 5");
+//            cache('topics:'.md5($topic->topic_name), $topics, null, 'redis');
+//        }
 
         View::assign([
             'books' => $books,
             'topic' => $topic,
-            'topics' => $topics,
             'header_title' => $topic->topic_name . '专题'
         ]);
         return view($this->tpl);

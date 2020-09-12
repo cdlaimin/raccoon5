@@ -40,20 +40,18 @@ class Topics extends Base
                 }
             }
         }
-        cache('topic:books:'.$id, $books, null, 'redis');
-
-        $topics = cache('topics:'.md5($topic->topic_name));
-        if (!$topics) {
-            $topics = Db::query(
-                "select * from " . $this->prefix . "topic where match(topic_name) 
-            against ('" . $topic->topic_name . "') LIMIT 5");
-            cache('topics:'.md5($topic->topic_name), $topics, null, 'redis');
-        }
+//        cache('topic:books:'.$id, $books, null, 'redis');
+//        $topics = cache('topics:'.md5($topic->topic_name));
+//        if (!$topics) {
+//            $topics = Db::query(
+//                "select * from " . $this->prefix . "topic where match(topic_name)
+//            against ('" . $topic->topic_name . "') LIMIT 5");
+//            cache('topics:'.md5($topic->topic_name), $topics, null, 'redis');
+//        }
 
         View::assign([
             'books' => $books,
-            'topic' => $topic,
-            'topics' => $topics
+            'topic' => $topic
         ]);
         return view($this->tpl);
     }

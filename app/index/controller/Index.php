@@ -120,7 +120,7 @@ class Index extends Base
         }
         $books = cache('searchresult:' . $keyword);
         if (!$books) {
-            $books = $this->bookService->search($keyword, 35, $this->prefix);
+            $books = $this->bookService->search($keyword, 35);
             foreach ($books as &$book) {
                 try {
                     $author = Author::find($book['author_id']);

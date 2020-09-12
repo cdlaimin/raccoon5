@@ -80,7 +80,7 @@ class index extends Base
         $keyword = input('keyword');
         $books = cache('searchresult:' . $keyword);
         if (!$books) {
-            $books = $this->bookService->search($keyword, 30, $this->prefix);
+            $books = $this->bookService->search($keyword, 30);
             cache('searchresult:' . $keyword, $books, null, 'redis');
         }
         foreach ($books as &$book) {

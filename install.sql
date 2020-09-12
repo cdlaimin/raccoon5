@@ -166,7 +166,7 @@ CREATE TABLE `xwx_book` (
   KEY `is_top` (`is_top`) USING BTREE,
   KEY `area_id` (`area_id`) USING BTREE,
    KEY `is_copyright` (`is_copyright`) USING BTREE,
-  FULLTEXT KEY `fidx` (`book_name`) with parser ngram,
+  KEY `book_name`(`book_name`) USING BTREE,
   unique KEY `unique_id`(`unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
@@ -319,7 +319,7 @@ CREATE TABLE `xwx_article`  (
   `create_time` int(10) UNSIGNED DEFAULT NULL,
   `update_time` int(10) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  FULLTEXT KEY `title` (`title`) with parser ngram,
+  KEY `title` (`title`) USING BTREE,
   KEY `book_id`(`book_id`) USING BTREE,
   KEY `unique_id`(`unique_id`) USING BTREE
 ) ENGINE = InnoDB ROW_FORMAT = Dynamic;
@@ -417,7 +417,7 @@ CREATE TABLE `xwx_topic`  (
   `create_time` int(11) UNSIGNED DEFAULT NULL,
   `update_time` int(11) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  FULLTEXT KEY `fidx` (`topic_name`) with parser ngram
+  KEY `topic_name`(`topic_name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
 
 INSERT INTO xwx_admin(username, `password`) VALUES('admin','123456')

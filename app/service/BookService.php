@@ -6,10 +6,23 @@ namespace app\service;
 use app\model\Book;
 use app\model\Chapter;
 use app\model\UserBuy;
+use Elasticsearch\ClientBuilder;
 use think\facade\Db;
 
 class BookService
 {
+    private $client;
+
+    // 构造函数
+    public function __construct()
+    {
+        $host = config('search.es.host');
+        $params = array(
+            $host
+        );
+        $this->client = ClientBuilder::create()->setHosts($params)->build();
+    }
+
     public function getPagedBooksAdmin($status, $where = '1=1')
     {
         if ($status == 1) {
@@ -173,16 +186,52 @@ FROM ' . $this->prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(i
         return $books;
     }
 
-    public function search($keyword, $num, $prefix)
+    public function search($keyword, $num)
     {
-        return Db::query(
-            "select * from " . $prefix . "book where delete_time=0 and match(book_name) 
-            against ('" . $keyword . "' IN NATURAL LANGUAGE MODE) LIMIT " . $num
-        );
+//        return Db::query(
+//            "select * from " . $prefix . "book where delete_time=0 and match(book_name)
+//            against ('" . $keyword . "' IN NATURAL LANGUAGE MODE) LIMIT " . $num
+//        );
+        $map[] = ['delete_time','=',0];
+        $map[] = ['book_name','like','%'.$keyword.'%'];
+        return Book::where($map)->limit($num)->select();
+    }
 
-//        $map[] = ['delete_time','=',0];
-//        $map[] = ['book_name','like','%'.$keyword.'%'];
-//        return Book::where($map)->select();
+    public function essearch($book_name, $summary, $index_name, $type_name, $from, $size) {
+        $params = [
+            'index' => $index_name,
+            'type' => $type_name,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'should' => [
+                            ['match' =>
+                                ['profile' =>
+                                    [
+                                        'query' => $book_name,
+                                        'boost' => 3, // 权重大
+                                    ]
+                                ]
+                            ],
+                            ['match' =>
+                                ['profile' =>
+                                    [
+                                        'query' => $summary,
+                                        'boost' => 2, // 权重大
+                                    ]
+                                ]
+                            ]
+                        ],
+                    ],
+                ],
+                'sort' => ['id' => ['order' => 'desc']],
+                'from' => $from,
+                'size' => $size
+            ]
+        ];
+
+        $results = $this->client->search($params);
+        return $results;
     }
 
     public function getHotBooks($prefix, $end_point, $date = '1900-01-01', $num = 10)

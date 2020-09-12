@@ -51,11 +51,13 @@ class ArticleService
         ];
     }
 
-    public function search($keyword, $num, $prefix)
+    public function search($keyword, $num)
     {
-        return Db::query(
-            "select * from " . $prefix . "article where match(title) 
-            against ('" . $keyword . "' IN NATURAL LANGUAGE MODE) LIMIT " . $num
-        );
+//        return Db::query(
+//            "select * from " . $prefix . "article where match(title)
+//            against ('" . $keyword . "' IN NATURAL LANGUAGE MODE) LIMIT " . $num
+//        );
+        $map[] = ['title','like','%'.$keyword.'%'];
+        return Article::where($map)->limit($num)->select();
     }
 }
