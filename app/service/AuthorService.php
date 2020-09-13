@@ -11,7 +11,8 @@ class AuthorService
     public function getAuthors($where = '1=1')
     {
         $page = config('page.back_end_page');
-        $authors = Author::where($where)->with('books')->paginate([
+        $authors = Author::where($where)->with('books')->order('id','desc')
+            ->paginate([
             'list_rows'=> $page,
             'query' => request()->param(),
             'var_page' => 'page',

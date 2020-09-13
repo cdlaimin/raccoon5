@@ -41,6 +41,7 @@
                         <tr class="text-c">
                             <th><input id="cbx" type="checkbox" value=""></th>
                             <th>ID</th>
+                            <th>用户名</th>
                             <th>作者名</th>
                             <th>创建时间</th>
                             <th>修改时间</th>
@@ -54,6 +55,7 @@
                         <tr class="text-c">
                             <td><input data-val="{$vo.id}" class="cbx" type="checkbox" value=""></td>
                             <td>{$vo.id}</td>
+                            <td>{$vo.username}</td>
                             <td>{$vo.author_name}</td>
                             <td>{$vo.create_time|date='Y-m-d H:i'}</td>
                             <td>{$vo.update_time|date='Y-m-d H:i'}</td>
