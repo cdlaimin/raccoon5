@@ -15,7 +15,7 @@
 
 # 关于
 - 官方博客：https://www.xiaohuanxiong.net/
-- 文档地址：https://www.kancloud.cn/hiliqi/xwx_comic_cms
+- 文档地址：https://www.kancloud.cn/hiliqi/raccoon5
 - 安装手册：https://shimo.im/docs/88tvyHk9XRpjv3hC/ 
 - 交流论坛：https://support.qq.com/products/176371
 - 官方QQ群：780362399
