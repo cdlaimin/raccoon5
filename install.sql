@@ -12,7 +12,7 @@ CREATE TABLE `xwx_admin` (
   `last_login_ip` varchar(100) DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for xwx_user
@@ -38,7 +38,7 @@ CREATE TABLE `xwx_user` (
   key `mobile` (`mobile`),
   key `email` (`email`),
   key `pid` (`pid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for xwx_user_finance
@@ -55,7 +55,7 @@ CREATE TABLE `xwx_user_finance`  (
   PRIMARY KEY (`id`) USING BTREE,
   key `user_id` (`user_id`) USING BTREE,
   key `usage` (`usage`) USING BTREE
-) ENGINE = InnoDB CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for xwx_user_order
@@ -76,7 +76,7 @@ CREATE TABLE `xwx_user_order`  (
   key `user_id` (`user_id`) USING BTREE,
   key `status` (`status`) USING BTREE,
   key `pay_type` (`pay_type`) USING BTREE
-) ENGINE = InnoDB CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for xwx_user_buy
@@ -92,7 +92,7 @@ CREATE TABLE `xwx_user_buy`  (
   `create_time` int(11) DEFAULT '0',
   `update_time` int(11) DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for author
@@ -113,7 +113,7 @@ CREATE TABLE `xwx_author` (
    key `email` (`email`) USING BTREE,
     key `status` (`status`) USING BTREE,
   key `author_name` (`author_name`) USING BTREE
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  ) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for banner
@@ -129,7 +129,7 @@ CREATE TABLE `xwx_banner` (
     `banner_order` INT(11) DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
     KEY `banner_order` (`banner_order`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for book
@@ -168,7 +168,7 @@ CREATE TABLE `xwx_book` (
    KEY `is_copyright` (`is_copyright`) USING BTREE,
   KEY `book_name`(`book_name`) USING BTREE,
   unique KEY `unique_id`(`unique_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for chapter
@@ -185,7 +185,7 @@ CREATE TABLE `xwx_chapter` (
   KEY `chapter_name` (`chapter_name`) USING BTREE,
   KEY `book_id` (`book_id`) USING BTREE,
   KEY `chapter_order` (`chapter_order`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for photo
@@ -201,7 +201,7 @@ CREATE TABLE `xwx_photo` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `chapter_id` (`chapter_id`) USING BTREE,
   KEY `pic_order` (`pic_order`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB ;
 
 -- ----------------------------
 -- Table structure for tags
@@ -215,7 +215,7 @@ CREATE TABLE `xwx_tags` (
   `cover_url` varchar(255) DEFAULT '' COMMENT '图片路径',
   PRIMARY KEY (`id`) USING BTREE,
   unique KEY `tag_name` (`tag_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for xwx_friendship_link
@@ -228,7 +228,7 @@ CREATE TABLE `xwx_friendship_link` (
   `create_time` int(11) DEFAULT '0',
   `update_time` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for xwx_area
@@ -241,7 +241,7 @@ CREATE TABLE `xwx_area` (
   `update_time` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   unique key `area_name` (`area_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for xwx_user_book
@@ -256,7 +256,7 @@ CREATE TABLE `xwx_user_favor` (
   PRIMARY KEY (`id`),
   key book_id (`book_id`) USING BTREE,
   key user_id (`user_id`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  ROW_FORMAT=Dynamic;
 
 -- ----------------------------
 -- Table structure for xwx_comments
@@ -272,7 +272,7 @@ CREATE TABLE `xwx_comments` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `book_id` (`book_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB ROW_FORMAT=Dynamic;
 
 -- ----------------------------
 -- Table structure for xwx_message
@@ -288,7 +288,7 @@ CREATE TABLE `xwx_message`  (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `pid` (`pid`) USING BTREE,
   KEY `uid` (`uid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for xwx_clicks
@@ -302,7 +302,7 @@ CREATE TABLE `xwx_clicks`  (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `book_id`(`book_id`) USING BTREE,
   KEY `cdate`(`cdate`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for xwx_article
@@ -338,7 +338,7 @@ CREATE TABLE `xwx_vip_code`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `code`(`code`) USING BTREE,
   INDEX `used`(`used`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB ROW_FORMAT=Dynamic;
 
 -- ----------------------------
 -- Table structure for xwx_charge_code
@@ -354,7 +354,7 @@ CREATE TABLE `xwx_charge_code`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `code`(`code`) USING BTREE,
   INDEX `used`(`used`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB ROW_FORMAT=Dynamic;
 
 DROP TABLE IF EXISTS `xwx_book_logs`;
 CREATE TABLE `xwx_book_logs`  (
@@ -370,7 +370,7 @@ CREATE TABLE `xwx_book_logs`  (
   INDEX `book_name`(`book_name`) USING BTREE,
   INDEX `log_time`(`log_time`) USING BTREE,
   INDEX `src`(`src`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB  ROW_FORMAT=Dynamic;
 
 -- ----------------------------
 -- Table structure for chapterlogs
@@ -387,7 +387,7 @@ CREATE TABLE `xwx_chapter_logs`  (
   INDEX `chapter_id`(`chapter_id`) USING BTREE,
   INDEX `chapter_name`(`chapter_name`) USING BTREE,
   INDEX `log_time`(`log_time`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB ROW_FORMAT=Dynamic;
 
 -- ----------------------------
 -- Table structure for photologs
@@ -402,7 +402,7 @@ CREATE TABLE `xwx_photo_logs`  (
   INDEX `src_url`(`src_url`) USING BTREE,
   INDEX `photo_id`(`photo_id`) USING BTREE,
   INDEX `log_time`(`log_time`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB ROW_FORMAT=Dynamic;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -418,6 +418,6 @@ CREATE TABLE `xwx_topic`  (
   `update_time` int(11) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `topic_name`(`topic_name`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB ROW_FORMAT=Dynamic;
 
 INSERT INTO xwx_admin(username, `password`) VALUES('admin','123456')
