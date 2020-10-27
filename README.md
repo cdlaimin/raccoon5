@@ -19,6 +19,7 @@
 - 安装手册：https://shimo.im/docs/88tvyHk9XRpjv3hC/ 
 - 交流论坛：https://support.qq.com/products/176371
 - 官方QQ群：780362399
+- 电报群：https://t.me/comiccms
 - 小浣熊系列软件官网：http://soft.xiaohuanxiong.net/
 
 # 开源协议
