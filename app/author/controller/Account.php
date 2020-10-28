@@ -67,10 +67,10 @@ class Account extends BaseController
                 } else {
                     $author->last_login_time = time();
                     $author->save();
-                    session('xwx_author_id', $author->id);
-                    session('xwx_author', $author->username);
-                    session('xwx_author_name', $author->author_name);
-                    session('xwx_author_email', $author->email);
+                    cookie('xwx_author_id', $author->id);
+                    cookie('xwx_author', $author->username);
+                    cookie('xwx_author_name', $author->author_name);
+                    cookie('xwx_author_email', $author->email);
                     return json(['code' => 0, 'err' => 0, 'msg' => '登录成功']);
                 }
             } catch (ModelNotFoundException $e) {
@@ -87,10 +87,10 @@ class Account extends BaseController
 
     public function logout()
     {
-        session('xwx_author_id', null);
-        session('xwx_author', null);
-        session('xwx_author_name', null);
-        session('xwx_author_email', null);
+        cookie('xwx_author_id', null);
+        cookie('xwx_author', null);
+        cookie('xwx_author_name', null);
+        cookie('xwx_author_email', null);
         $this->redirect('/login');
     }
 

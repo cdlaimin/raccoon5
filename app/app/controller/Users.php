@@ -111,7 +111,7 @@ class Users extends BaseAuth
         $user->nick_name = $nick_name;
         $res = $user->save(['id' => $this->uid]);
         if ($res) {
-            session('xwx_nick_name', $nick_name);
+            cookie('xwx_nick_name', $nick_name);
             return json(['success' => 1, 'msg' => '修改成功']);
         } else {
             return json(['success' => 0, 'msg' => '修改失败']);
@@ -132,7 +132,7 @@ class Users extends BaseAuth
             }
             $user->mobile = $phone;
             $user->save();
-            session('xwx_user_mobile', $phone);
+            cookie('xwx_user_mobile', $phone);
             return json(['success' => 1, 'msg' => '绑定成功']);
         } catch (DataNotFoundException $e) {
             return json(['success' => 0, 'msg' => '用户不存在']);

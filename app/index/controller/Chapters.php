@@ -54,9 +54,9 @@ class Chapters extends Base
         }
 
         if(!$flag) {
-            $uid = session('xwx_user_id');
+            $uid = cookie('xwx_user_id');
             if (!is_null($uid)) { //如果用户已经登录
-                $vip_expire_time = session('xwx_vip_expire_time'); //用户等级
+                $vip_expire_time = cookie('xwx_vip_expire_time'); //用户等级
                 $time = $vip_expire_time - time(); //计算vip用户时长
                 if ($time > 0) { //如果是vip会员且没过期，则可以不受限制
                     $flag = true;

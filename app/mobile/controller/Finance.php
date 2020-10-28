@@ -304,7 +304,7 @@ class Finance extends BaseUc
                                     $user->vip_expire_time = $user->vip_expire_time + $month * 30 * 24 * 60 * 60;
                                 }
                                 $user->save();
-                                session('xwx_vip_expire_time', $user->vip_expire_time);
+                                cookie('xwx_vip_expire_time', $user->vip_expire_time);
                                 Cache::clear('pay'); //删除缓存
                                 return json(['err' => 0, 'msg' => '购买成功，等待跳转']);
                             }
@@ -369,7 +369,7 @@ class Finance extends BaseUc
                 ]);
                 // 提交事务
                 Db::commit();
-                session('xwx_vip_expire_time', $new_expire_time);
+                cookie('xwx_vip_expire_time', $new_expire_time);
 
                 return json(['err' => 0, 'msg' => 'vip码使用成功']);
             } catch (DataNotFoundException $e) {

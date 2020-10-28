@@ -23,7 +23,7 @@ class Books extends Base
     public function getlist() {
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $author_id = session('xwx_author_id');
+        $author_id = cookie('xwx_author_id');
         $map[] = ['author_id', '=', $author_id];
         $map[] = ['delete_time', '=', 0];
         $data = Book::where($map)->order('id', 'desc');
