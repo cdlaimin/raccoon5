@@ -404,20 +404,4 @@ CREATE TABLE `xwx_photo_logs`  (
   INDEX `log_time`(`log_time`) USING BTREE
 ) ENGINE = InnoDB ROW_FORMAT=Dynamic;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for xwx_topic
--- ----------------------------
-DROP TABLE IF EXISTS `xwx_topic`;
-CREATE TABLE `xwx_topic`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `topic_name` varchar(100) NOT NULL,
-  `create_time` int(11) UNSIGNED DEFAULT NULL,
-  `update_time` int(11) UNSIGNED DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `topic_name`(`topic_name`) USING BTREE
-) ENGINE = InnoDB ROW_FORMAT=Dynamic;
-
 INSERT INTO xwx_admin(username, `password`) VALUES('admin','123456')
