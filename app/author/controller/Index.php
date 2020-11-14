@@ -18,7 +18,7 @@ class Index extends Base
     }
 
     public function info() {
-        $email = cookie('xwx_author_email');
+        $email = session('xwx_author_email');
         View::assign([
             'uid' => $this->uid,
             'author_name' => $this->author_name,
@@ -29,7 +29,7 @@ class Index extends Base
 
     public function update() {
         $pwd = trim(input('password'));
-        $uid = cookie('xwx_author_id');
+        $uid = session('xwx_author_id');
         try {
             $author = Author::findOrFail($uid);
             $author->author_name = trim(input('author_name'));
@@ -38,8 +38,8 @@ class Index extends Base
                 $author->password = md5(trim($pwd).config('site.salt'));
             }
             $author->save();
-            cookie('xwx_author_name', $author->author_name);
-            cookie('xwx_author_email', $author->email);
+            session('xwx_author_name', $author->author_name);
+            session('xwx_author_email', $author->email);
             return json(['err' => 0, 'msg' => '更新信息成功']);
         } catch (ModelNotFoundException $e) {
             return json(['err' => 1, 'msg' => '用户非法']);

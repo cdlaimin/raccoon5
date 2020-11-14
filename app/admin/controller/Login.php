@@ -31,7 +31,7 @@ class Login extends BaseController
             $admin->last_login_time = time();
             $admin->last_login_ip = $this->request->ip();
             $admin->save();
-            cookie('xwx_admin',$admin->username);
+            session('xwx_admin',$admin->username);
             return json(['err' => 0, 'msg' => '登录成功']);
         }else{
             View::assign('cdn',config('site.cdn'));
@@ -40,7 +40,7 @@ class Login extends BaseController
     }
 
     public function logout(){
-        cookie('xwx_admin',null);
+        session('xwx_admin',null);
         return redirect(url('login/login'));
     }
 

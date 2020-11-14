@@ -42,7 +42,7 @@ class Users extends BaseUc
             if ($time > 0) {
                 $day = ceil(($user->vip_expire_time - time()) / (60 * 60 * 24));
             }
-            cookie('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
+            session('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
             View::assign([
                 'balance' => $balance,
                 'user' => $user,
@@ -97,7 +97,7 @@ class Users extends BaseUc
                 $user->nick_name = $nick_name;
                 $result = $user->save();
                 if ($result) {
-                    cookie('xwx_nick_name', $nick_name);
+                    session('xwx_nick_name', $nick_name);
                     return json(['msg' => '修改成功']);
                 } else {
                     return json(['msg' => '修改失败']);
@@ -129,10 +129,10 @@ class Users extends BaseUc
                 } else { //vip没过期，则在现有vip时间上增加
                     $user->vip_expire_time = $user->vip_expire_time + 1 * 30 * 24 * 60 * 60;
                 }
-                cookie('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
+                session('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
                 $user->save();
 
-                cookie('xwx_user_mobile', $phone);
+                session('xwx_user_mobile', $phone);
                 return json(['err' => 0, 'msg' => '绑定成功']);
             }
         } catch (DataNotFoundException $e) {
@@ -214,8 +214,8 @@ class Users extends BaseUc
 
         $url = config('site.url');
         $util = new Common();
-        $shortUrl = config('site.schema').config('site.domain').'?pid='.cookie('xwx_user_id');
-        //$shortUrl =  $util->shorturl($url.'?pid='.cookie('xwx_user_id'));
+        $shortUrl = config('site.schema').config('site.domain').'?pid='.session('xwx_user_id');
+        //$shortUrl =  $util->shorturl($url.'?pid='.session('xwx_user_id'));
         View::assign([
             'rewards' => $rewards,
             'promotion_rate' => (float)config('payment.promotional_rewards_rate') * 100,

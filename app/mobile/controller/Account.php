@@ -105,11 +105,11 @@ class Account extends Base
                 } else {
                     $user->last_login_time = time();
                     $user->save();
-                    cookie('xwx_user_id', $user->id);
-                    cookie('xwx_user', $user->username);
-                    cookie('xwx_nick_name', $user->nick_name);
-                    cookie('xwx_user_mobile', $user->mobile);
-                    cookie('xwx_vip_expire_time', $user->vip_expire_time);
+                    session('xwx_user_id', $user->id);
+                    session('xwx_user', $user->username);
+                    session('xwx_nick_name', $user->nick_name);
+                    session('xwx_user_mobile', $user->mobile);
+                    session('xwx_vip_expire_time', $user->vip_expire_time);
                     return ['err' => 0, 'msg' => '登录成功'];
                 }
             } catch (DataNotFoundException $e) {
@@ -136,11 +136,11 @@ class Account extends Base
 
     public function logout()
     {
-        cookie('xwx_user', null);
-        cookie('xwx_user_id', null);
-        cookie('xwx_nick_name', null);
-        cookie('xwx_user_mobile',null);
-        cookie('xwx_vip_expire_time', null);
+        session('xwx_user', null);
+        session('xwx_user_id', null);
+        session('xwx_nick_name', null);
+        session('xwx_user_mobile',null);
+        session('xwx_vip_expire_time', null);
         $this->redirect('/login');
     }
 

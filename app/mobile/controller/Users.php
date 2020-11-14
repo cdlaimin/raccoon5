@@ -43,7 +43,7 @@ class Users extends BaseUc
             if ($time > 0) {
                 $day = ceil(($user->vip_expire_time - time()) / (60 * 60 * 24));
             }
-            cookie('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
+            session('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
             View::assign([
                 'balance' => $balance,
                 'user' => $user,
@@ -118,7 +118,7 @@ class Users extends BaseUc
                 $user->nick_name = $nick_name;
                 $result = $user->save();
                 if ($result) {
-                    cookie('xwx_nick_name', $nick_name);
+                    session('xwx_nick_name', $nick_name);
                     return json(['msg' => '修改成功']);
                 } else {
                     return json(['msg' => '修改失败']);
@@ -153,10 +153,10 @@ class Users extends BaseUc
                 } else { //vip没过期，则在现有vip时间上增加
                     $user->vip_expire_time = $user->vip_expire_time + 1 * 30 * 24 * 60 * 60;
                 }
-                cookie('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
+                session('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
                 $user->save();
 
-                cookie('xwx_user_mobile', $phone);
+                session('xwx_user_mobile', $phone);
                 return ['err' => 0, 'msg' => '绑定成功'];
             }
         } catch (DataNotFoundException $e) {
