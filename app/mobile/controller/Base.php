@@ -25,7 +25,7 @@ class Base extends BaseController
         $vip_expire_time = session('vip_expire_time');
         if (!empty($vip_expire_time)){
             if($vip_expire_time - time() <= 0){ //计算出会员是否过期
-                session('xwx_vip_expire_time', null);
+                session('vip_expire_time', null);
             }
         }
         $this->uid = session('xwx_user_id');
@@ -62,7 +62,7 @@ class Base extends BaseController
             'xwx_user' => session('xwx_user'),
             'xwx_nick_name' => session('xwx_nick_name'),
             'xwx_user_mobile'=> session('xwx_user_mobile'),
-            'xwx_vip_expire_time' => session('xwx_vip_expire_time'),
+            'vip_expire_time' => session('vip_expire_time'),
             'cdn' => session('site.cdn')
         ]);
     }

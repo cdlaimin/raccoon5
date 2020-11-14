@@ -101,7 +101,7 @@ class Account extends Base
                     session('xwx_user', $user->username);
                     session('xwx_nick_name', $user->nick_name);
                     session('xwx_user_mobile', $user->mobile);
-                    session('xwx_vip_expire_time', $user->vip_expire_time);
+                    session('vip_expire_time', $user->vip_expire_time);
                     return json(['err' => 0, 'msg' => '登录成功']);
                 }
             }  catch (DataNotFoundException $e) {
@@ -124,7 +124,7 @@ class Account extends Base
         session('xwx_user_id', null);
         session('xwx_nick_name', null);
         session('xwx_user_mobile',null);
-        session('xwx_vip_expire_time', null);
+        session('vip_expire_time', null);
         $this->redirect('/login');
     }
 

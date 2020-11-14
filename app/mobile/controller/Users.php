@@ -43,7 +43,7 @@ class Users extends BaseUc
             if ($time > 0) {
                 $day = ceil(($user->vip_expire_time - time()) / (60 * 60 * 24));
             }
-            session('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
+            session('vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
             View::assign([
                 'balance' => $balance,
                 'user' => $user,
@@ -153,7 +153,7 @@ class Users extends BaseUc
                 } else { //vip没过期，则在现有vip时间上增加
                     $user->vip_expire_time = $user->vip_expire_time + 1 * 30 * 24 * 60 * 60;
                 }
-                session('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
+                session('vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
                 $user->save();
 
                 session('xwx_user_mobile', $phone);
